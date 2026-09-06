@@ -153,15 +153,15 @@ SIH_AR/
 
 **Built, verified, and packaged in a debug APK.** All logic is regression‑tested via a headless harness (auth, clan scoping, dashboard, chain flow, HMAC, QR round‑trip).
 
-### Cloud sync (Firebase) — scaffolded
-The app ships with a bundled **Firebase SDK** (`js/firebase-bundle.js`) and a **Firestore + Auth** data layer (`js/firebase-config.js`, `js/store.js`). When enabled it:
+### Cloud sync (Firebase) — live for project `safetylens-ar`
+The app ships with a bundled **Firebase SDK** (`js/firebase-bundle.js`) and a **Firestore + Auth** data layer (`js/firebase-config.js`, `js/store.js`), now **enabled** against the `safetylens-ar` project. When live it:
 - uses **Firestore** for `clans`, `workers`, and `certificates`, with **built‑in offline persistence** — writes queue locally and sync when connectivity returns, so the offline requirement is retained;
 - uses **Firebase Auth** for real logins (email/password for admins, anonymous + Firestore doc for workers);
-- feeds realtime **`onSnapshot`** listeners into an in‑memory cache, so the **admin dashboard queries real Firestore data scoped to `clanId`** (seed data gone).
-**To go live:** paste your Firebase web config into `js/firebase-config.js` and set `ENABLED: true`, enable Firestore + Email/Password auth, then rebuild. Until then the app runs in offline LocalStorage mode.
+- feeds realtime **`onSnapshot`** listeners into an in‑memory cache, so the **admin dashboard queries real Firestore data scoped to `clanId`**.
+Console prerequisites (one time): Firestore database + **Email/Password and Anonymous** providers on, one admin Auth user, and a `clans/<clanId>` doc carrying that user's UID in `adminUid`. If the bundle ever fails to load, the app falls back to offline LocalStorage mode rather than hanging.
 
 **Known limitations / next steps:**
-- By default it uses **client‑side `localStorage`** (no backend), so data doesn't sync across devices until Firebase is enabled.
+- With Firebase disabled it falls back to **client‑side `localStorage`** (no backend), so data doesn't sync across devices.
 - The **walk‑closer** gate is motion‑based with a fallback (indoor accelerometers are unreliable).
 - **Release‑signed APK** not produced yet (debug APK is sideloadable for the demo).
 - **Demo video** not yet recorded.

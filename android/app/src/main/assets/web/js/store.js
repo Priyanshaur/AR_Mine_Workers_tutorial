@@ -58,11 +58,15 @@ const SLStore = (function () {
   function loadFirebaseBundle() {
     return new Promise((resolve) => {
       if (firebaseAvailable()) return resolve(true);
+      let settled = false;
+      const done = (v) => { if (!settled) { settled = true; resolve(v); } };
       const s = document.createElement('script');
       s.src = 'js/firebase-bundle.js';
-      s.onload = () => resolve(true);
-      s.onerror = () => resolve(false);
+      s.onload = () => done(true);
+      s.onerror = () => done(false);
       document.head.appendChild(s);
+      // never hang the app: fall back to local if the bundle doesn't load
+      setTimeout(() => done(false), 8000);
     });
   }
 
@@ -133,6 +137,7 @@ const SLStore = (function () {
 
     // ── auth ────────────────────────────────────────────────────────────────
     loginAdmin: function (username, password) {
+      if (!state) { initLocal(); }
       if (mode === 'firebase' && fb) {
         return fb.auth.signInWithEmailAndPassword(username, password).then(res => {
           const uidv = res.user.uid;
@@ -152,6 +157,7 @@ const SLStore = (function () {
     },
 
     loginWorker: function (name, clanId) {
+      if (!state) { initLocal(); }
       const trimmed = (name || '').trim();
       if (!trimmed) return Promise ? Promise.resolve({ ok: false, reason: 'name' }) : { ok: false, reason: 'name' };
       if (mode === 'firebase' && fb) {
