@@ -54,15 +54,13 @@ const DashboardModule = {
       const last = SLStore.latestResult(w.id);
       const score = last ? last.score : 80;
       let cls = 'green'; if (score < 60) cls = 'red'; else if (score < 75) cls = 'amber';
-      const modules = new Set((SLStore.listResults(w.id)||[]).map(r=>r.moduleId)).size;
       const sel = w.id === this.selectedWorkerId ? 'selected' : '';
-      html += `<div class="wroster ${sel}" data-id="${w.id}"><div class="wr-name">${w.name}</div><div class="wr-meta">${modules} ${t('completed')}</div><div class="pill ${cls}">${score}</div></div>`;
+      html += `<button class="chip ${sel}" data-id="${w.id}"><span>${w.name}</span><span class="chip-score ${cls}">${score}</span></button>`;
     });
     el.innerHTML = html;
-    // clickable selection
-    el.querySelectorAll('.wroster').forEach(row => row.addEventListener('click', function () {
+    el.querySelectorAll('.chip').forEach(chip => chip.addEventListener('click', function () {
       DashboardModule.selectedWorkerId = this.getAttribute('data-id');
-      DashboardModule.renderWorkerList('dash-worker-list');
+      DashboardModule.renderWorkerList('dash-workers');
       DashboardModule.renderForSelected();
     }));
   },
@@ -164,5 +162,9 @@ const DashboardModule = {
       if (val) val.textContent = `+${self.simulatedDays} ${t('days_passed')}`;
       self.renderForSelected();
     });
+
+    // Refresh re-reads the store so newly completed results appear immediately.
+    const rf = document.getElementById('dash-refresh');
+    if (rf) rf.addEventListener('click', function () { self.init(); });
   }
 };

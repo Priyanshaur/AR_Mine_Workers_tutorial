@@ -66,9 +66,10 @@ Each step is a **multi‑object search chain**:
 
 ### Admin clan dashboard (clan‑scoped)
 - **KPI strip**: workers, runs, average readiness, at‑risk count.
-- **Worker roster** (click to select) → per‑worker **module results** table: module, score, **mistakes**, **time taken** (with retry count).
-- **Skill‑level readiness** bars and a **readiness decay curve**, with a "Simulate +90 days" control.
-- Everything is scoped to the logged‑in admin's clan only.
+- **Worker chips** (tap to select) → a single detail panel with the worker header and a per‑module **results** table: module, score, **mistakes**, **time taken** (with retry count).
+- Collapsible **skill‑level readiness** bars and a **readiness decay curve**, plus a "Simulate +90 days" control.
+- A **Refresh** button re‑reads the store so newly completed results appear immediately.
+- Everything is scoped to the logged‑in admin's clan only (data updates from worker results saved to `localStorage`).
 
 ### Other
 - **Localization**: English, Hindi, Santali (UI, briefings, questions, consequences, hints, skills, dashboard).

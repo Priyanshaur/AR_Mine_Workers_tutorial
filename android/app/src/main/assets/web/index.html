@@ -316,7 +316,7 @@
       </div>
     </div>
 
-    <!-- Screen 5: Readiness Dashboard (clan-scoped, clean layout) -->
+    <!-- Screen 5: Readiness Dashboard (clan-scoped, simplified) -->
     <div id="screen-dashboard" class="app-screen">
       <div class="dash-header">
         <div>
@@ -329,45 +329,42 @@
       <div class="dash-body">
         <div id="kpi-strip" class="kpi-strip"></div>
 
-        <div class="dash-grid">
-          <!-- left: worker list -->
-          <div class="dash-panel">
-            <div class="panel-title" data-i18n="worker_list_title">WORKERS</div>
-            <div id="dash-worker-list" class="dash-worker-list"></div>
-          </div>
+        <!-- compact worker selector (chips) -->
+        <div id="dash-workers" class="chip-row"></div>
 
-          <!-- right: selected worker detail -->
-          <div class="dash-panel">
-            <div class="panel-title" data-i18n="selected_worker_title">SELECTED WORKER</div>
-            <div id="dash-worker-head"></div>
-            <div class="panel-title" data-i18n="module_results_title">MODULE RESULTS</div>
-            <div id="dash-mod-results"></div>
-          </div>
-        </div>
-
+        <!-- selected worker detail -->
         <div class="dash-panel">
-          <div class="panel-title" data-i18n="skill_panel_title">SKILL-LEVEL READINESS</div>
-          <div id="skill-panel"></div>
-        </div>
+          <div class="panel-head">
+            <span class="panel-title">SELECTED WORKER</span>
+            <button id="dash-refresh" class="mini-btn" data-i18n="refresh">Refresh</button>
+          </div>
+          <div id="dash-worker-head"></div>
+          <div class="panel-title" data-i18n="module_results_title">MODULE RESULTS</div>
+          <div id="dash-mod-results"></div>
 
-        <div class="dash-panel">
-          <div class="panel-title" data-i18n="decay_chart_title">READINESS DECAY CURVE</div>
-          <svg class="decay-svg" width="342" height="150" viewBox="0 0 342 150">
-            <defs>
-              <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#FFB020" stop-opacity="0.28"/>
-                <stop offset="100%" stop-color="#FFB020" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <path d="M 30,10 L 30,130 L 332,130" fill="none" stroke="#2A3034" stroke-width="1"/>
-            <path id="decay-fill-path" d="" fill="url(#g)"/>
-            <path id="decay-line-path" d="" fill="none" stroke="#FFB020" stroke-width="2"/>
-            <circle id="decay-marker-dot" cx="120.6" cy="67.1" r="4" fill="#FFB020"/>
-            <text x="30" y="12" fill="#F4F2EC" font-family="IBM Plex Sans" font-size="11">Sita Devi</text>
-            <text x="2" y="16" fill="#868D93" font-family="IBM Plex Mono" font-size="10">100</text>
-            <text x="12" y="134" fill="#868D93" font-family="IBM Plex Mono" font-size="10">0</text>
-            <text x="308" y="146" fill="#868D93" font-family="IBM Plex Mono" font-size="10">150d</text>
-          </svg>
+          <details class="dash-details" open>
+            <summary data-i18n="skill_panel_title">SKILL-LEVEL READINESS</summary>
+            <div id="skill-panel"></div>
+          </details>
+          <details class="dash-details">
+            <summary data-i18n="decay_chart_title">READINESS DECAY CURVE</summary>
+            <svg class="decay-svg" width="342" height="150" viewBox="0 0 342 150">
+              <defs>
+                <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#FFB020" stop-opacity="0.28"/>
+                  <stop offset="100%" stop-color="#FFB020" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M 30,10 L 30,130 L 332,130" fill="none" stroke="#2A3034" stroke-width="1"/>
+              <path id="decay-fill-path" d="" fill="url(#g)"/>
+              <path id="decay-line-path" d="" fill="none" stroke="#FFB020" stroke-width="2"/>
+              <circle id="decay-marker-dot" cx="120.6" cy="67.1" r="4" fill="#FFB020"/>
+              <text x="30" y="12" fill="#F4F2EC" font-family="IBM Plex Sans" font-size="11">—</text>
+              <text x="2" y="16" fill="#868D93" font-family="IBM Plex Mono" font-size="10">100</text>
+              <text x="12" y="134" fill="#868D93" font-family="IBM Plex Mono" font-size="10">0</text>
+              <text x="308" y="146" fill="#868D93" font-family="IBM Plex Mono" font-size="10">150d</text>
+            </svg>
+          </details>
         </div>
 
         <div class="sim-row">

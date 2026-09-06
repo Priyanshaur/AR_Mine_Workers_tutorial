@@ -767,3 +767,23 @@ body {
 .ms-none { color: var(--muted); font-size: 12px; }
 
 .decay-svg { display: block; margin: 0 auto; }
+
+/* ── Simplified dashboard: chips, refresh, collapsibles ──────────────────── */
+.chip-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 12px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 5px 10px; cursor: pointer; font-size: 12px; }
+.chip.selected { border-color: var(--cyan); background: rgba(79,227,193,0.10); }
+.chip-score { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 11px; padding: 1px 6px; border-radius: 8px; }
+.chip-score.green { background: rgba(62,207,142,0.15); color: var(--success); }
+.chip-score.amber { background: rgba(255,176,32,0.15); color: var(--amber); }
+.chip-score.red { background: rgba(255,82,51,0.15); color: var(--danger); }
+
+.panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.panel-head .panel-title { margin-bottom: 0; }
+.mini-btn { background: transparent; border: 1px solid var(--border); color: var(--cyan); font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 4px 9px; border-radius: 5px; cursor: pointer; }
+.mini-btn:active { background: var(--cyan); color: var(--ink); }
+
+.dash-details { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 8px; }
+.dash-details summary { cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: var(--muted); list-style: none; }
+.dash-details summary::before { content: "▸ "; color: var(--cyan); }
+.dash-details[open] summary::before { content: "▾ "; }
+.dash-details > div { margin-top: 10px; }
