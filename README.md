@@ -160,6 +160,32 @@ The app ships with a bundled **Firebase SDK** (`js/firebase-bundle.js`) and a **
 - feeds realtime **`onSnapshot`** listeners into an in‑memory cache, so the **admin dashboard queries real Firestore data scoped to `clanId`**.
 Console prerequisites (one time): Firestore database + **Email/Password and Anonymous** providers on, one admin Auth user, and a `clans/<clanId>` doc carrying that user's UID in `adminUid`. If the bundle ever fails to load, the app falls back to offline LocalStorage mode rather than hanging.
 
+### Security note (Firebase web key + rules)
+The `apiKey` in `js/firebase-config.js` is a **Firebase *Web* API key — public by design** (it ships inside every client app, so GitHub's secret scanner will always flag it). Real protection comes from two console steps, not from hiding the key:
+1. **Restrict the key** — Google Cloud Console → APIs & Services → Credentials → your Web key → Application restrictions: **Android apps**, package `com.safetylens.ar` (+ your SHA-1); API restrictions: **Identity Toolkit API, Token Service API, Cloud Firestore API** only.
+2. **Replace test-mode Firestore rules** with authenticated-only rules matching this app's model:
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /clans/{clanId} {
+      allow read: if request.auth != null;
+      allow write: if false; // clan setup via console only
+    }
+    match /workers/{workerId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+      allow delete: if false;
+    }
+    match /certificates/{certId} {
+      allow read, create: if request.auth != null;
+      allow update, delete: if false;
+    }
+  }
+}
+```
+After applying both, the GitHub alert can be marked resolved. Rotating the key is optional (it would just mean updating the config + rebuilding); restrictions + rules are what actually secure it.
+
 **Known limitations / next steps:**
 - With Firebase disabled it falls back to **client‑side `localStorage`** (no backend), so data doesn't sync across devices.
 - The **walk‑closer** gate is motion‑based with a fallback (indoor accelerometers are unreliable).
