@@ -737,6 +737,1101 @@ const TRAINING_MODULES = {
         ]
       }
     ]
+  },
+  "mod3": {
+    "id": "mod3",
+    "titleKey": "mod3_title",
+    "alarmTextKey": "alarm_mach",
+    "skills": [
+      "conveyor_ops",
+      "loto",
+      "machine_guard"
+    ],
+    "briefing": {
+      "en": "You are on the crusher line. Belt 4 has jammed. The drive is stopped, but nobody has locked it out — in machinery a \"stopped\" machine can restart at any moment. Find the right tool and follow the safe procedure before you touch anything.",
+      "hi": "आप क्रशर लाइन पर हैं। बेल्ट 4 जाम हो गई है। ड्राइव बंद है, लेकिन कोई लॉकआउट नहीं किया गया — और मशीनरी में \"बंद\" मशीन कभी भी फिर चालू हो सकती है। कुछ छूने से पहले सही उपकरण खोजें और सुरक्षित प्रक्रिया अपनाएँ।",
+      "sat": "ᱠᱨᱥᱚᱨ ᱞᱟᱭᱤᱱ - ᱵᱮᱞᱴ ᱔ ᱡᱟᱢ᱾"
+    },
+    "steps": [
+      {
+        "id": "m1",
+        "prompt": {
+          "en": "Find the jammed conveyor drive motor.",
+          "hi": "जाम ड्राइव मोटर खोजें।",
+          "sat": "ᱢᱚᱴᱚᱨ ᱠᱷᱩᱡ"
+        },
+        "objects": [
+          {
+            "key": "motor",
+            "name": {
+              "en": "Drive motor",
+              "hi": "ड्राइव मोटर",
+              "sat": "ᱢᱚᱴᱚᱨ"
+            },
+            "correct": true,
+            "offset": 210,
+            "far": true
+          },
+          {
+            "key": "wrench",
+            "name": {
+              "en": "Steel wrench",
+              "hi": "स्टील रिंच",
+              "sat": "ᱨᱤᱸᱪ"
+            },
+            "correct": false,
+            "offset": 90,
+            "far": false
+          },
+          {
+            "key": "torch",
+            "name": {
+              "en": "Electric torch",
+              "hi": "बिजली की टॉर्च",
+              "sat": "ᱴᱚᱨᱪ"
+            },
+            "correct": false,
+            "offset": 320,
+            "far": false
+          },
+          {
+            "key": "bucket",
+            "name": {
+              "en": "Water bucket",
+              "hi": "पानी की बाल्टी",
+              "sat": "ᱫᱟᱜ ᱵᱟᱞᱴᱤ"
+            },
+            "correct": false,
+            "offset": 150,
+            "far": false
+          }
+        ],
+        "timerSeconds": 16,
+        "question": {
+          "en": "The belt is stopped but NOT locked out. What do you do first?",
+          "hi": "बेल्ट बंद है पर लॉकआउट नहीं। पहले क्या करेंगे?",
+          "sat": "ᱛᱷᱹᱭ?"
+        },
+        "choices": [
+          {
+            "id": "A",
+            "letter": "A",
+            "correct": false,
+            "text": {
+              "en": "Reach in quickly to clear the jam — the line is only stopped, not locked out",
+              "hi": "जाम जल्दी निकालें — लाइन केवल रुकी है, लॉकआउट नहीं",
+              "sat": "ᱵᱷᱤᱛᱨᱤ ᱫᱟᱲᱟᱭ"
+            },
+            "consequence": {
+              "title": {
+                "en": "MACHINE RESTART HAZARD",
+                "hi": "मशीन पुनः-चालू जोखिम",
+                "sat": "ᱨᱤ-ᱥᱴᱟᱨᱴ"
+              },
+              "explanation": {
+                "en": "A stopped machine can restart at any moment (start-up surge, mis-set control). Reaching in while it can re-energise is how limbs get crushed.",
+                "hi": "रुकी मशीन कभी भी फिर चालू हो सकती है। जब तक ऊर्जा स्रोत बंद न हो, अंदर जाना खतरनाक है।",
+                "sat": "ᱢᱚᱴᱚᱨ ᱨᱩ-ᱥᱴᱟᱨᱴ"
+              }
+            }
+          },
+          {
+            "id": "B",
+            "letter": "B",
+            "correct": false,
+            "text": {
+              "en": "Ask a coworker to hold the switch off manually while you clear it",
+              "hi": "साथी से स्विच अकेला पकड़ने को कहें",
+              "sat": "ᱥᱩᱭᱤᱪ ᱦᱩᱞᱫ"
+            },
+            "consequence": {
+              "title": {
+                "en": "INFORMAL LOCKOUT",
+                "hi": "अनौपचारिक लॉकआउट",
+                "sat": "ᱞᱳᱠ"
+              },
+              "explanation": {
+                "en": "A manual hold is not a lockout. One slip or a miscommunication re-energises the machine while your hand is inside the nip point.",
+                "hi": "मैनुअल होल्ड लॉकआउट नहीं है। एक चूक से मशीन फिर चालू हो सकती है।",
+                "sat": "ᱢᱟᱱᱩᱭᱮᱞ ᱦᱩᱞᱫ"
+              }
+            }
+          },
+          {
+            "id": "C",
+            "letter": "C",
+            "correct": true,
+            "text": {
+              "en": "Physically lock out and tag the energy source, then verify zero energy, before any contact",
+              "hi": "ऊर्जा स्रोत को भौतिक रूप से लॉक व टैग करें, फिर संपर्क से पहले शून्य ऊर्जा सत्यापित करें",
+              "sat": "ᱞᱳᱠ+ᱴᱮᱜᱚ"
+            }
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "prompt": {
+          "en": "Find the main isolation switch.",
+          "hi": "मुख्य आइसोलेशन स्विच खोजें।",
+          "sat": "ᱥᱩᱭᱤᱪ"
+        },
+        "objects": [
+          {
+            "key": "switch",
+            "name": {
+              "en": "Isolation switch",
+              "hi": "आइसोलेशन स्विच",
+              "sat": "ᱥᱩᱭᱤᱪ"
+            },
+            "correct": true,
+            "offset": 95,
+            "far": true
+          },
+          {
+            "key": "valve",
+            "name": {
+              "en": "Gas valve",
+              "hi": "गैस वाल्व",
+              "sat": "ᱜᱮᱥ ᱵᱷᱟᱞᱵᱽ"
+            },
+            "correct": false,
+            "offset": 300,
+            "far": false
+          },
+          {
+            "key": "door",
+            "name": {
+              "en": "Ventilation door",
+              "hi": "वेंटिलेशन दरवाज़ा",
+              "sat": "ᱦᱚᱭ ᱫᱩᱣᱟᱹᱨ"
+            },
+            "correct": false,
+            "offset": 180,
+            "far": false
+          },
+          {
+            "key": "bucket",
+            "name": {
+              "en": "Water bucket",
+              "hi": "पानी की बाल्टी",
+              "sat": "ᱫᱟᱜ ᱵᱟᱞᱴᱤ"
+            },
+            "correct": false,
+            "offset": 240,
+            "far": false
+          }
+        ],
+        "timerSeconds": 15,
+        "question": {
+          "en": "You have isolated the drive. What is the correct order now?",
+          "hi": "ड्राइव अलग कर ली। अब सही क्रम क्या है?",
+          "sat": "ᱥᱩᱭᱤᱪ"
+        },
+        "choices": [
+          {
+            "id": "A",
+            "letter": "A",
+            "correct": true,
+            "text": {
+              "en": "Lock the isolator with your personal lock, apply a tag, then verify zero energy",
+              "hi": "अपने लॉक से आइसोलेटर बंद करें, टैग लगाएं, फिर शून्य ऊर्जा सत्यापित करें",
+              "sat": "ᱞᱳᱠ+ᱴᱮᱜᱚ"
+            }
+          },
+          {
+            "id": "B",
+            "letter": "B",
+            "correct": false,
+            "text": {
+              "en": "Tag it but leave it unlocked — quicker to get back to work",
+              "hi": "बस टैग करें, बंद न करें — जल्दी काम",
+              "sat": "ᱴᱮᱜᱚ"
+            },
+            "consequence": {
+              "title": {
+                "en": "TAG WITHOUT LOCK",
+                "hi": "लॉक के बिना टैग",
+                "sat": "ᱴᱮᱜᱚ"
+              },
+              "explanation": {
+                "en": "A tag is a warning, not a device. Without a personal lock the isolator can be operated by anyone, defeating the isolation.",
+                "hi": "टैग चेतावनी है, साधन नहीं। व्यक्तिगत लॉक के बिना कोई भी स्विच चला सकता है।",
+                "sat": "ᱴᱮᱜᱚ"
+              }
+            }
+          },
+          {
+            "id": "C",
+            "letter": "C",
+            "correct": false,
+            "text": {
+              "en": "Keep the switch off and ask a mate to stand guard and resist flipping it",
+              "hi": "स्विच बंद रखें और साथी को पहरा देने को कहें",
+              "sat": "ᱯᱷᱚᱨ ᱢᱮ"
+            },
+            "consequence": {
+              "title": {
+                "en": "PEOPLE ARE NOT A LOCK",
+                "hi": "लोग लॉक नहीं हैं",
+                "sat": "ᱞᱳᱠ"
+              },
+              "explanation": {
+                "en": "Guarding is not a control. A reliable lockout uses physical locks so the energy source cannot be re-energised even by accident.",
+                "hi": "पहरा नियंत्रण नहीं है। भौतिक लॉक ही सुरक्षित है।",
+                "sat": "ᱞᱳᱠ"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "m3",
+        "prompt": {
+          "en": "Find the machine guard on the conveyor head.",
+          "hi": "कन्वेयर हेड पर मशीन गार्ड खोजें।",
+          "sat": "ᱜᱟᱨᱰ"
+        },
+        "objects": [
+          {
+            "key": "guard",
+            "name": {
+              "en": "Machine guard",
+              "hi": "मशीन गार्ड",
+              "sat": "ᱜᱟᱨᱰ"
+            },
+            "correct": true,
+            "offset": 300,
+            "far": true
+          },
+          {
+            "key": "hands",
+            "name": {
+              "en": "Bare hands",
+              "hi": "खाली हाथ",
+              "sat": "ᱦᱟᱛᱤ"
+            },
+            "correct": false,
+            "offset": 90,
+            "far": false
+          },
+          {
+            "key": "towel_damp",
+            "name": {
+              "en": "Damp towel",
+              "hi": "गीला तौलिया",
+              "sat": "ᱫᱟᱜ ᱛᱩᱣᱟᱞ"
+            },
+            "correct": false,
+            "offset": 200,
+            "far": false
+          },
+          {
+            "key": "bucket",
+            "name": {
+              "en": "Water bucket",
+              "hi": "पानी की बाल्टी",
+              "sat": "ᱫᱟᱜ ᱵᱟᱞᱴᱤ"
+            },
+            "correct": false,
+            "offset": 150,
+            "far": false
+          }
+        ],
+        "timerSeconds": 16,
+        "question": {
+          "en": "Before running the line again, what about the guard?",
+          "hi": "लाइन फिर चलाने से पहले गार्ड का क्या?",
+          "sat": "ᱜᱟᱨᱰ"
+        },
+        "choices": [
+          {
+            "id": "A",
+            "letter": "A",
+            "correct": true,
+            "text": {
+              "en": "Re-fit and secure the guard, then start — guards protect from moving parts",
+              "hi": "गार्ड लगाकर सुरक्षित करें, फिर चलाएं",
+              "sat": "ᱜᱟᱨᱰ"
+            }
+          },
+          {
+            "id": "B",
+            "letter": "B",
+            "correct": false,
+            "text": {
+              "en": "Run it without the guard so you can see the belt",
+              "hi": "गार्ड हटाकर चलाएं ताकि बेल्ट दिखे",
+              "sat": "ᱜᱟᱨᱰ"
+            },
+            "consequence": {
+              "title": {
+                "en": "EXPOSED NIP HAZARD",
+                "hi": "खुला निप जोखिम",
+                "sat": "ᱱᱤᱯ"
+              },
+              "explanation": {
+                "en": "Running without the guard exposes the nip point where a belt meets a pulley — a classic crushing point.",
+                "hi": "बिना गार्ड चलाने से बेल्ट-पुली जोड़ खुला रहता है, कुचलने का खतरा।",
+                "sat": "ᱱᱤᱯ"
+              }
+            }
+          },
+          {
+            "id": "C",
+            "letter": "C",
+            "correct": false,
+            "text": {
+              "en": "Guard only the top; the bottom is low and no one touches it",
+              "hi": "केवल ऊपर गार्ड; नीचे कोई नहीं छूता",
+              "sat": "ᱴᱚ"
+            },
+            "consequence": {
+              "title": {
+                "en": "PARTIAL GUARDING",
+                "hi": "आंशिक गार्ड",
+                "sat": "ᱜᱟᱨᱰ"
+              },
+              "explanation": {
+                "en": "Guards must cover the reachable hazard. A partial guard still leaves the crush point exposed.",
+                "hi": "गार्ड पूरे खतरे को ढके। आंशिक गार्ड से कुचलने का बिंदु खुला रहता है।",
+                "sat": "ᱜᱟᱨᱰ"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "mod4": {
+    "id": "mod4",
+    "titleKey": "mod4_title",
+    "alarmTextKey": "alarm_elec",
+    "skills": [
+      "electrical_fire",
+      "arc_flash",
+      "hv_loto"
+    ],
+    "briefing": {
+      "en": "After overnight rain, water has pooled beside the switchgear board and a cable is wet. Electricity is invisible — treat every panel as live until proven dead. Find and handle the right items.",
+      "hi": "रात भर बारिश के बाद स्विचगियर बोर्ड के पास पानी जमा है और तार गीला है। बिजली अदृश्य है — हर पैनल को तब तक सक्रिय मानें जब तक निर्जीव सिद्ध न हो। सही वस्तुएँ खोजें।",
+      "sat": "ᱡᱟᱹᱲᱤ ᱛᱟᱭᱚᱢ ᱯᱮᱱᱮᱞ ᱥᱩᱨ ᱫᱟᱜ᱾"
+    },
+    "steps": [
+      {
+        "id": "e1",
+        "prompt": {
+          "en": "Find the switchgear panel.",
+          "hi": "स्विचगियर पैनल खोजें।",
+          "sat": "ᱯᱮᱱᱮᱞ"
+        },
+        "objects": [
+          {
+            "key": "panel",
+            "name": {
+              "en": "Switchgear panel",
+              "hi": "स्विचगियर पैनल",
+              "sat": "ᱯᱮᱱᱮᱞ"
+            },
+            "correct": true,
+            "offset": 210,
+            "far": true
+          },
+          {
+            "key": "bucket",
+            "name": {
+              "en": "Water bucket",
+              "hi": "पानी की बाल्टी",
+              "sat": "ᱫᱟᱜ ᱵᱟᱞᱴᱤ"
+            },
+            "correct": false,
+            "offset": 90,
+            "far": false
+          },
+          {
+            "key": "towel_damp",
+            "name": {
+              "en": "Damp towel",
+              "hi": "गीला तौलिया",
+              "sat": "ᱫᱟᱜ ᱛᱩᱣᱟᱞ"
+            },
+            "correct": false,
+            "offset": 320,
+            "far": false
+          },
+          {
+            "key": "torch",
+            "name": {
+              "en": "Electric torch",
+              "hi": "बिजली की टॉर्च",
+              "sat": "ᱴᱚᱨᱪ"
+            },
+            "correct": false,
+            "offset": 150,
+            "far": false
+          }
+        ],
+        "timerSeconds": 16,
+        "question": {
+          "en": "Water is pooled near the panel and it looks intact. What do you do?",
+          "hi": "पैनल के पास पानी है और यह सही दिखता है। क्या करेंगे?",
+          "sat": "ᱫᱟᱜ"
+        },
+        "choices": [
+          {
+            "id": "A",
+            "letter": "A",
+            "correct": false,
+            "text": {
+              "en": "Continue routine operation — the panel looks intact",
+              "hi": "नियमित कार्य जारी रखें — पैनल सही दिखता है",
+              "sat": "ᱯᱮᱱᱮᱞ"
+            },
+            "consequence": {
+              "title": {
+                "en": "NORMALCY BIAS",
+                "hi": "सामान्यता पूर्वाग्रह",
+                "sat": "ᱥᱟᱢᱱ"
+              },
+              "explanation": {
+                "en": "An intact-looking panel is not proof of safety. Moisture can create a live leakage path even with the cover closed and dry on the outside.",
+                "hi": "सही दिखने वाला पैनल सुरक्षा प्रमाण नहीं है। नमी से जीवित रिसाव पथ बन सकता है।",
+                "sat": "ᱫᱟᱜ"
+              }
+            }
+          },
+          {
+            "id": "B",
+            "letter": "B",
+            "correct": false,
+            "text": {
+              "en": "Use a dry wooden plank to reach the switch \"safely\"",
+              "hi": "सूखी लकड़ी से स्विच \"सुरक्षित\" तक पहुँचें",
+              "sat": "ᱞᱠᱨ"
+            },
+            "consequence": {
+              "title": {
+                "en": "INSULATION WORKAROUND",
+                "hi": "इन्सुलेशन समाधान",
+                "sat": "ᱞᱠᱨ"
+              },
+              "explanation": {
+                "en": "A plank does not remove the hazard path from the wet floor to your body, and it fails completely if the equipment is energised at higher voltage.",
+                "hi": "लकड़ी से गीले फर्श से आपके शरीर तक का खतरा पथ नहीं हटता।",
+                "sat": "ᱞᱠᱨ"
+              }
+            }
+          },
+          {
+            "id": "C",
+            "letter": "C",
+            "correct": true,
+            "text": {
+              "en": "De-energise and report, then verify dead before any contact",
+              "hi": "निर्जीव करें और रिपोर्ट करें, फिर संपर्क से पहले मृत सत्यापित करें",
+              "sat": "ᱰᱤ-ᱮᱱᱨᱡ"
+            }
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "prompt": {
+          "en": "Find the main breaker to de-energise.",
+          "hi": "मुख्य ब्रेकर खोजें।",
+          "sat": "ᱵᱨᱤᱠᱨ"
+        },
+        "objects": [
+          {
+            "key": "switch",
+            "name": {
+              "en": "Isolation switch",
+              "hi": "आइसोलेशन स्विच",
+              "sat": "ᱥᱩᱭᱤᱪ"
+            },
+            "correct": true,
+            "offset": 95,
+            "far": true
+          },
+          {
+            "key": "valve",
+            "name": {
+              "en": "Gas valve",
+              "hi": "गैस वाल्व",
+              "sat": "ᱜᱮᱥ ᱵᱷᱟᱞᱵᱽ"
+            },
+            "correct": false,
+            "offset": 300,
+            "far": false
+          },
+          {
+            "key": "door",
+            "name": {
+              "en": "Ventilation door",
+              "hi": "वेंटिलेशन दरवाज़ा",
+              "sat": "ᱦᱚᱭ ᱫᱩᱣᱟᱹᱨ"
+            },
+            "correct": false,
+            "offset": 180,
+            "far": false
+          },
+          {
+            "key": "hands",
+            "name": {
+              "en": "Bare hands",
+              "hi": "खाली हाथ",
+              "sat": "ᱦᱟᱛᱤ"
+            },
+            "correct": false,
+            "offset": 240,
+            "far": false
+          }
+        ],
+        "timerSeconds": 15,
+        "question": {
+          "en": "You need to make the panel dead. What is the correct approach?",
+          "hi": "पैनल मृत करना है। सही तरीका?",
+          "sat": "ᱵᱨᱤᱠᱨ"
+        },
+        "choices": [
+          {
+            "id": "A",
+            "letter": "A",
+            "correct": true,
+            "text": {
+              "en": "Open the breaker, lock it out, and verify with a tester that there is no voltage",
+              "hi": "ब्रेकर खोलें, लॉक करें और परीक्षक से शून्य वोल्टता सत्यापित करें",
+              "sat": "ᱞᱳᱠ+ᱴᱮᱥᱴ"
+            }
+          },
+          {
+            "id": "B",
+            "letter": "B",
+            "correct": false,
+            "text": {
+              "en": "Open the breaker and trust that it is dead",
+              "hi": "ब्रेकर खोलें और भरोसा करें कि मृत है",
+              "sat": "ᱴᱨᱟᱥᱴ"
+            },
+            "consequence": {
+              "title": {
+                "en": "ASSUMED DEAD",
+                "hi": "मृत समझा",
+                "sat": "ᱢᱩᱴ"
+              },
+              "explanation": {
+                "en": "A breaker can be faulty, back-fed, or the circuit re-energised. \"Assume dead\" is the most common cause of electrical fatality — always test.",
+                "hi": "ब्रेकर खराब हो सकता है। \"मृत समझना\" सबसे आम बिजली दुर्घटना कारण है — हमेशा परीक्षण करें।",
+                "sat": "ᱴᱮᱥᱴ"
+              }
+            }
+          },
+          {
+            "id": "C",
+            "letter": "C",
+            "correct": false,
+            "text": {
+              "en": "Leave it live and work around it carefully",
+              "hi": "सक्रिय छोड़ें और सावधानी से काम करें",
+              "sat": "ᱞᱚᱠ"
+            },
+            "consequence": {
+              "title": {
+                "en": "LIVE-WORK HAZARD",
+                "hi": "सक्रिय कार्य जोखिम",
+                "sat": "ᱞᱟᱭive"
+              },
+              "explanation": {
+                "en": "Working around a live panel near water is exactly the arc-flash and shock scenario that kills.",
+                "hi": "गीले स्थान पर सक्रिय पैनल के पास काम आर्क-फ्लैश और झटके का कारण है।",
+                "sat": "ᱥᱚᱠ"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "prompt": {
+          "en": "Find the arc-flash warning sign.",
+          "hi": "आर्क-फ्लैश चेतावनी संकेत खोजें।",
+          "sat": "ᱥᱟᱭᱱ"
+        },
+        "objects": [
+          {
+            "key": "sign",
+            "name": {
+              "en": "Warning sign",
+              "hi": "चेतावनी संकेत",
+              "sat": "ᱥᱟᱭᱱ"
+            },
+            "correct": true,
+            "offset": 300,
+            "far": true
+          },
+          {
+            "key": "towel_dry",
+            "name": {
+              "en": "Dry towel",
+              "hi": "सूखा तौलिया",
+              "sat": "ᱡᱚᱜ ᱛᱩᱣᱟᱞ"
+            },
+            "correct": false,
+            "offset": 90,
+            "far": false
+          },
+          {
+            "key": "bucket",
+            "name": {
+              "en": "Water bucket",
+              "hi": "पानी की बाल्टी",
+              "sat": "ᱫᱟᱜ ᱵᱟᱞᱴᱤ"
+            },
+            "correct": false,
+            "offset": 200,
+            "far": false
+          },
+          {
+            "key": "wrench",
+            "name": {
+              "en": "Steel wrench",
+              "hi": "स्टील रिंच",
+              "sat": "ᱨᱤᱸᱪ"
+            },
+            "correct": false,
+            "offset": 150,
+            "far": false
+          }
+        ],
+        "timerSeconds": 16,
+        "question": {
+          "en": "What does the arc-flash boundary mean to you?",
+          "hi": "आर्क-फ्लैश सीमा का आपके लिए क्या मतलब?",
+          "sat": "ᱥᱟᱭᱱ"
+        },
+        "choices": [
+          {
+            "id": "A",
+            "letter": "A",
+            "correct": true,
+            "text": {
+              "en": "Stay outside the boundary unless the panel is de-energised or you are properly rated",
+              "hi": "बिना निर्जीव किए या रेटेड उपकरण के बिना सीमा से बाहर रहें",
+              "sat": "ᱵᱷᱷᱥ"
+            }
+          },
+          {
+            "id": "B",
+            "letter": "B",
+            "correct": false,
+            "text": {
+              "en": "It is just a sticker — work as usual",
+              "hi": "केवल स्टिकर है — हमेशा की तरह काम करें",
+              "sat": "ᱥᱴᱠ"
+            },
+            "consequence": {
+              "title": {
+                "en": "IGNORED WARNING",
+                "hi": "चेतावनी की अनदेखी",
+                "sat": "ᱥᱴᱠ"
+              },
+              "explanation": {
+                "en": "Arc flash can melt clothing and cause fatal burns instantly. The boundary is set from real incident data, not decoration.",
+                "hi": "आर्क फ्लैश पलक झपकते घातक जला सकता है। सीमा वास्तविक दुर्घटना आंकड़ों से है।",
+                "sat": "ᱥᱴᱠ"
+              }
+            }
+          },
+          {
+            "id": "C",
+            "letter": "C",
+            "correct": false,
+            "text": {
+              "en": "Move one step closer to look around the corner",
+              "hi": "कोने देखने एक कदम और पास जाएँ",
+              "sat": "ᱰᱩ"
+            },
+            "consequence": {
+              "title": {
+                "en": "CLOSE-APPROACH",
+                "hi": "निकट सम्पर्क",
+                "sat": "ᱪᱩ"
+              },
+              "explanation": {
+                "en": "There is no \"a step closer is fine\" — the boundary is a hard line for unqualified exposure.",
+                "hi": "\"एक कदम और ठीक\" जैसा नहीं है — सीमा कठोर रेखा है।",
+                "sat": "ᱪᱩ"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "mod5": {
+    "id": "mod5",
+    "titleKey": "mod5_title",
+    "alarmTextKey": "alarm_trans",
+    "skills": [
+      "dumper",
+      "blind_spot",
+      "pedestrian"
+    ],
+    "briefing": {
+      "en": "You need to cross the haul road to reach the workshop. A loaded dumper is approaching. Vehicles on site have large blind spots, and vehicle movement is a leading cause of mining fatalities. Decide how to cross safely.",
+      "hi": "आपको कार्यशाला तक हॉल रोड पार करनी है। एक लदा डंपर आ रहा है। साइट के वाहनों में बड़े ब्लाइंड स्पॉट होते हैं। सुरक्षित पार करने का निर्णय करें।",
+      "sat": "ᱦᱟᱞ ᱨᱳᱰ ᱯᱟᱨ᱾"
+    },
+    "steps": [
+      {
+        "id": "t1",
+        "prompt": {
+          "en": "Find the approaching dumper.",
+          "hi": "आ रहे डंपर को खोजें।",
+          "sat": "ᱰᱟᱢᱯᱨ"
+        },
+        "objects": [
+          {
+            "key": "truck",
+            "name": {
+              "en": "Haul truck",
+              "hi": "डंपर",
+              "sat": "ᱰᱟᱢᱯᱨ"
+            },
+            "correct": true,
+            "offset": 210,
+            "far": true
+          },
+          {
+            "key": "bucket",
+            "name": {
+              "en": "Water bucket",
+              "hi": "पानी की बाल्टी",
+              "sat": "ᱫᱟᱜ ᱵᱟᱞᱴᱤ"
+            },
+            "correct": false,
+            "offset": 90,
+            "far": false
+          },
+          {
+            "key": "towel_dry",
+            "name": {
+              "en": "Dry towel",
+              "hi": "सूखा तौलिया",
+              "sat": "ᱡᱚᱜ ᱛᱩᱣᱟᱞ"
+            },
+            "correct": false,
+            "offset": 320,
+            "far": false
+          },
+          {
+            "key": "hands",
+            "name": {
+              "en": "Bare hands",
+              "hi": "खाली हाथ",
+              "sat": "ᱦᱟᱛᱤ"
+            },
+            "correct": false,
+            "offset": 150,
+            "far": false
+          }
+        ],
+        "timerSeconds": 16,
+        "question": {
+          "en": "A loaded dumper is approaching. What do you do before crossing?",
+          "hi": "लदा डंपर आ रहा है। पार करने से पहले क्या करेंगे?",
+          "sat": "ᱰᱟᱢᱯᱨ"
+        },
+        "choices": [
+          {
+            "id": "A",
+            "letter": "A",
+            "correct": false,
+            "text": {
+              "en": "The driver has surely seen me — cross quickly",
+              "hi": "ड्राइवर ने देखा ही होगा — जल्दी पार करें",
+              "sat": "ᱯᱟᱨ"
+            },
+            "consequence": {
+              "title": {
+                "en": "BLIND SPOT ASSUMPTION",
+                "hi": "ब्लाइंड स्पॉट धारणा",
+                "sat": "ᱵᱞᱭ"
+              },
+              "explanation": {
+                "en": "Large vehicles have massive blind spots. If the driver cannot see you, \"surely seen me\" is a fatal gamble.",
+                "hi": "बड़े वाहनों में बड़े ब्लाइंड स्पॉट होते हैं। \"जरूर देखा होगा\" घातक जुआ है।",
+                "sat": "ᱵᱞᱭ"
+              }
+            }
+          },
+          {
+            "id": "B",
+            "letter": "B",
+            "correct": false,
+            "text": {
+              "en": "Run across to beat the truck",
+              "hi": "डंपर को हराकर भागकर पार करें",
+              "sat": "ᱫᱟᱲᱟᱭ"
+            },
+            "consequence": {
+              "title": {
+                "en": "RACE THE VEHICLE",
+                "hi": "वाहन से दौड़",
+                "sat": "ᱫᱟᱲᱟᱭ"
+              },
+              "explanation": {
+                "en": "Running increases your time in the danger zone and removes your ability to react. It is worse, not faster and safer.",
+                "hi": "दौड़ने से खतरा क्षेत्र में समय बढ़ता है और प्रतिक्रिया घटती है।",
+                "sat": "ᱫᱟᱲᱟᱭ"
+              }
+            }
+          },
+          {
+            "id": "C",
+            "letter": "C",
+            "correct": true,
+            "text": {
+              "en": "Stop, make eye contact / signal the driver, and wait for clear acknowledgment",
+              "hi": "रुकें, ड्राइवर से आँख मिलाएँ / संकेत दें और स्पष्ट स्वीकृति की प्रतीक्षा करें",
+              "sat": "ᱥᱤᱜᱱᱟᱞ"
+            }
+          }
+        ]
+      },
+      {
+        "id": "t2",
+        "prompt": {
+          "en": "Find the high-visibility vest.",
+          "hi": "हाई-विज़ बनियान खोजें।",
+          "sat": "ᱵᱮᱥᱴ"
+        },
+        "objects": [
+          {
+            "key": "vest",
+            "name": {
+              "en": "High-vis vest",
+              "hi": "हाई-विज़ बनियान",
+              "sat": "ᱵᱮᱥᱴ"
+            },
+            "correct": true,
+            "offset": 95,
+            "far": true
+          },
+          {
+            "key": "towel_damp",
+            "name": {
+              "en": "Damp towel",
+              "hi": "गीला तौलिया",
+              "sat": "ᱫᱟᱜ ᱛᱩᱣᱟᱞ"
+            },
+            "correct": false,
+            "offset": 300,
+            "far": false
+          },
+          {
+            "key": "bucket",
+            "name": {
+              "en": "Water bucket",
+              "hi": "पानी की बाल्टी",
+              "sat": "ᱫᱟᱜ ᱵᱟᱞᱴᱤ"
+            },
+            "correct": false,
+            "offset": 180,
+            "far": false
+          },
+          {
+            "key": "torch",
+            "name": {
+              "en": "Electric torch",
+              "hi": "बिजली की टॉर्च",
+              "sat": "ᱴᱚᱨᱪ"
+            },
+            "correct": false,
+            "offset": 240,
+            "far": false
+          }
+        ],
+        "timerSeconds": 15,
+        "question": {
+          "en": "Why wear high-visibility at a haul road?",
+          "hi": "हॉल रोड पर हाई-विज़ क्यों?",
+          "sat": "ᱵᱮᱥᱴ"
+        },
+        "choices": [
+          {
+            "id": "A",
+            "letter": "A",
+            "correct": true,
+            "text": {
+              "en": "So operators can spot you in mirrors and blind spots from a distance",
+              "hi": "ताकि ऑपरेटर आपको दूर से दर्पण और ब्लाइंड स्पॉट में देख सकें",
+              "sat": "ᱵᱮᱥᱴ"
+            }
+          },
+          {
+            "id": "B",
+            "letter": "B",
+            "correct": false,
+            "text": {
+              "en": "It keeps you warm at night",
+              "hi": "रात में गर्म रहता है",
+              "sat": "ᱜᱨᱢ"
+            },
+            "consequence": {
+              "title": {
+                "en": "WRONG PURPOSE",
+                "hi": "गलत उद्देश्य",
+                "sat": "ᱵᱷᱩ"
+              },
+              "explanation": {
+                "en": "High-visibility is for being seen, not warmth. Wearing it does nothing for you if you forget the crossing procedure.",
+                "hi": "हाई-विज़ दिखने के लिए है, गर्माहट के लिए नहीं।",
+                "sat": "ᱵᱮᱥᱴ"
+              }
+            }
+          },
+          {
+            "id": "C",
+            "letter": "C",
+            "correct": false,
+            "text": {
+              "en": "It is a uniform rule that has no safety value",
+              "hi": "केवल वर्दी नियम है, कोई सुरक्षा मूल्य नहीं",
+              "sat": "ᱱᱤᱭᱚᱢ"
+            },
+            "consequence": {
+              "title": {
+                "en": "SAFETY IGNORED",
+                "hi": "सुरक्षा की अनदेखी",
+                "sat": "ᱥᱮ"
+              },
+              "explanation": {
+                "en": "It is precisely the real value — being seen — that prevents vehicle-pedestrian incidents.",
+                "hi": "दिखना ही वास्तविक मूल्य है जो वाहन-पैदल दुर्घटना रोकता है।",
+                "sat": "ᱥᱮ"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "t3",
+        "prompt": {
+          "en": "Find the designated crossing point.",
+          "hi": "निर्धारित क्रॉसिंग बिंदु खोजें।",
+          "sat": "ᱠᱨᱥ"
+        },
+        "objects": [
+          {
+            "key": "sign",
+            "name": {
+              "en": "Warning sign",
+              "hi": "चेतावनी संकेत",
+              "sat": "ᱥᱟᱭᱱ"
+            },
+            "correct": true,
+            "offset": 300,
+            "far": true
+          },
+          {
+            "key": "door",
+            "name": {
+              "en": "Ventilation door",
+              "hi": "वेंटिलेशन दरवाज़ा",
+              "sat": "ᱦᱚᱭ ᱫᱩᱣᱟᱹᱨ"
+            },
+            "correct": false,
+            "offset": 90,
+            "far": false
+          },
+          {
+            "key": "bucket",
+            "name": {
+              "en": "Water bucket",
+              "hi": "पानी की बाल्टी",
+              "sat": "ᱫᱟᱜ ᱵᱟᱞᱴᱤ"
+            },
+            "correct": false,
+            "offset": 200,
+            "far": false
+          },
+          {
+            "key": "towel_damp",
+            "name": {
+              "en": "Damp towel",
+              "hi": "गीला तौलिया",
+              "sat": "ᱫᱟᱜ ᱛᱩᱣᱟᱞ"
+            },
+            "correct": false,
+            "offset": 150,
+            "far": false
+          }
+        ],
+        "timerSeconds": 16,
+        "question": {
+          "en": "Where should you cross the haul road?",
+          "hi": "हॉल रोड कहाँ पार करनी चाहिए?",
+          "sat": "ᱠᱨᱥ"
+        },
+        "choices": [
+          {
+            "id": "A",
+            "letter": "A",
+            "correct": true,
+            "text": {
+              "en": "At the marked crossing point, when the road is clear and the driver has acknowledged you",
+              "hi": "चिन्हित क्रॉसिंग बिंदु पर, जब रोड साफ हो और ड्राइवर ने स्वीकार किया हो",
+              "sat": "ᱠᱨᱥ"
+            }
+          },
+          {
+            "id": "B",
+            "letter": "B",
+            "correct": false,
+            "text": {
+              "en": "Anywhere — at the shortest distance to my work",
+              "hi": "कहीं भी — काम के सबसे निकट",
+              "sat": "ᱠᱨᱥ"
+            },
+            "consequence": {
+              "title": {
+                "en": "UNCONTROLLED CROSSING",
+                "hi": "अनियंत्रित क्रॉसिंग",
+                "sat": "ᱠᱨᱥ"
+              },
+              "explanation": {
+                "en": "Crossing outside the marked point puts you in an unexpected location with unpredictable vehicle flow.",
+                "hi": "चिन्हित बिंदु से बाहर पार करना अप्रत्याशित स्थिति पैदा करता है।",
+                "sat": "ᱠᱨᱥ"
+              }
+            }
+          },
+          {
+            "id": "C",
+            "letter": "C",
+            "correct": false,
+            "text": {
+              "en": "Right behind the loaded truck — it has just passed",
+              "hi": "लदे डंपर के ठीक पीछे — अभी निकला है",
+              "sat": "ᱴᱨᱠ"
+            },
+            "consequence": {
+              "title": {
+                "en": "TRAILING BLIND SPOT",
+                "hi": "पीछे का ब्लाइंड स्पॉट",
+                "sat": "ᱴᱨᱠ"
+              },
+              "explanation": {
+                "en": "The space directly behind a haul truck is a blind spot the driver is actively reversing away from — the worst place to enter.",
+                "hi": "हॉल ट्रक के ठीक पीछे ब्लाइंड स्पॉट है — सबसे खतरनाक स्थान।",
+                "sat": "ᱴᱨᱠ"
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
 };
 
@@ -773,5 +1868,6 @@ const STEP_HINTS = {
     sat: "á±¥á±®á±¸á±œá±®á±ž á±¦á±šá±­-á±Ÿ â€” á±¦á±šá±­ á±«á±©á±£á±Ÿá±¹á±¨ á±µá±šá±±á±«á±š á±›á±® á±µá±šá±›á±šá±¨ á±µá±·á±Ÿá±œá±½á±¾"
   }
 };
+
 
 

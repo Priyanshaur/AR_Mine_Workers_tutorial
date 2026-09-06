@@ -23,7 +23,7 @@ const STEP_CLUES = {
   "mod2.2": { en: "Find the steel door that controls the tunnel airflow.", hi: "सुरंग की हवा नियंत्रित करने वाला स्टील दरवाज़ा खोजें।", sat: "ᱦᱚᱭ ᱫᱩᱣᱟᱹᱨ" }
 };
 
-function moduleNum(m) { return m.id === 'mod1' ? '1' : '2'; }
+function moduleNum(m) { return (m.id || 'mod1').replace('mod', ''); }
 function stepFailedCount(stepIndex) {
   const prefix = moduleNum(activeModule) + (stepIndex + 1);
   return wrongTurnsInSession.filter(tag => tag.indexOf(prefix) === 0).length;
@@ -384,6 +384,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   document.getElementById('card-mod1')?.addEventListener('click', () => startModule(TRAINING_MODULES.mod1));
   document.getElementById('card-mod2')?.addEventListener('click', () => startModule(TRAINING_MODULES.mod2));
+  document.getElementById('card-mod3')?.addEventListener('click', () => startModule(TRAINING_MODULES.mod3));
+  document.getElementById('card-mod4')?.addEventListener('click', () => startModule(TRAINING_MODULES.mod4));
+  document.getElementById('card-mod5')?.addEventListener('click', () => startModule(TRAINING_MODULES.mod5));
 
   // Briefing "Begin"
   document.getElementById('btn-briefing-begin')?.addEventListener('click', () => {

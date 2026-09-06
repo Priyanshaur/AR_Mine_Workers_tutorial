@@ -40,7 +40,9 @@ The gap is not *knowledge* — it is *behavior under pressure*. A rule read in a
 ### Training modules
 - **Module 1 — Gas Leak & Confined Space** (3 steps)
 - **Module 2 — Fire & Explosion Response** (3 steps)
-- **Module 3 — Machinery & Lockout‑Tagout** (roadmap / greyed out)
+- **Module 3 — Machinery & Equipment Safety** (machine guarding, lockout‑tagout, conveyor/crusher safe operation — 3 steps)
+- **Module 4 — Electrical Hazard Safety** (arc flash, high‑voltage lockout, wet‑condition equipment — 3 steps)
+- **Module 5 — Transport & Heavy Vehicle Safety** (haul‑truck blind spots, dumper awareness, safe pedestrian‑vehicle separation — 3 steps)
 
 Each step is a **multi‑object search chain**:
 1. A **scenario briefing** introduces the situation.
@@ -153,4 +155,4 @@ SIH_AR/
 - The **walk‑closer** gate is motion‑based with a fallback (indoor accelerometers are unreliable).
 - **Release‑signed APK** not produced yet (debug APK is sideloadable for the demo).
 - **Demo video** not yet recorded.
-- Module 3 (Machinery/Lockout) and modules for the remaining safety domains are roadmap.
+- Modules for the remaining safety domains (e.g. PPE/dust exposure, blasting) are roadmap — Modules 1–5 are built.
