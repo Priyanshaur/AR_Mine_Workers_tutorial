@@ -142,7 +142,7 @@ const QRVerifier = {
               <div class="verifier-box valid">
                 <div class="v-status">✓ ${t('verifier_valid')}</div>
                 <div class="v-detail">Worker: <strong>${res.payload.worker}</strong></div>
-                <div class="v-detail">Module: <strong>${res.payload.module === 'mod1' ? 'Gas Leak & Confined Space' : 'Fire & Explosion Response'}</strong></div>
+                <div class="v-detail">Module: <strong>${(typeof TRAINING_MODULES !== 'undefined' && TRAINING_MODULES[res.payload.module]) ? t(TRAINING_MODULES[res.payload.module].titleKey) : res.payload.module}</strong></div>
                 <div class="v-detail">Readiness Score: <strong>${res.payload.score}/100</strong></div>
                 <div class="v-detail mono">Signature: ${res.payload.sig}</div>
               </div>`;

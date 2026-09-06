@@ -15,6 +15,7 @@ let briefedModuleId = null; // which module's briefing has been shown this sessi
 
 // Identification clues shown during the find step (helps users tell objects apart).
 const STEP_CLUES = {
+  "mod0.0": { en: "Look for the BIG GREEN bottle.", hi: "बड़ी हरी बोतल देखें।", sat: "ᱢᱟᱨᱟᱝ ᱦᱟᱹᱨᱤᱭᱟᱹᱹ ᱧᱮᱞ ᱢᱮ᱾" },
   "mod1.0": { en: "Look for a pressurised vessel with a red handwheel — the source of the smell.", hi: "एक दबाव वाला बर्तन जिसमें लाल हैंडव्हील है — गंध का स्रोत।", sat: "ᱨᱮᱰ ᱦᱮᱱᱰᱣᱦᱤᱞ ᱥᱟᱶ ᱵᱷᱩᱞ-ᱟ" },
   "mod1.1": { en: "Find the spoked handwheel that shuts off the supply line.", hi: "आपूर्ति लाइन बंद करने वाला तीलियों वाला हैंडव्हील खोजें।", sat: "ᱦᱮᱱᱰᱣᱦᱤᱞ ᱠᱷᱩᱡ" },
   "mod1.2": { en: "Find the box with a screen showing a number that keeps climbing.", hi: "ऐसा बॉक्स जिसकी स्क्रीन पर संख्या बढ़ रही है।", sat: "ᱥᱠᱨᱤᱱ ᱟᱜ ᱵᱚᱠᱥ" },
@@ -114,6 +115,13 @@ function setAlarmCaption(module) {
   TTSEngine.speak(t(module.alarmTextKey) + ". " + captionText);
 }
 
+// Guided 1-2-3 stepper for first-time workers (spoken for low-literacy users)
+function setGuide(phase) {
+  document.querySelectorAll('.guide-step').forEach(el => el.classList.toggle('active', el.getAttribute('data-phase') === phase));
+  if (phase === 'tap') TTSEngine.speak(t('guide_tap'));
+  else if (phase === 'answer') TTSEngine.speak(t('guide_answer'));
+}
+
 function renderStepUI() {
   ARHUDEngine.stop();
   ChainEngine.stop();
@@ -155,11 +163,15 @@ function renderStepUI() {
     ch.style.display = 'block';
   }
 
+  // Phase 1: FIND — guide always visible
+  setGuide('find');
+
   // Place the candidate objects
   ChainEngine.start('ar-object-grid', step.objects, {
     onFound: function (o) { if (o.correct) revealQuestion(step); else wrongSelect(step, o); },
     onWrong: function (o) { wrongSelect(step, o); },
     onFocusLost: function (o) {},
+    onFirstFocus: function () { setGuide('tap'); },
     onApproach: function (done) { runApproachGate(done); }
   });
 }
@@ -194,6 +206,8 @@ function revealQuestion(step) {
     c.querySelectorAll('.choice-btn').forEach(btn => btn.addEventListener('click', function () { handleChoiceSelection(this.getAttribute('data-choice-id')); }));
   }
   answerArmedAt = nowMs();
+  // Phase 3: ANSWER
+  setGuide('answer');
 }
 
 function wrongSelect(step, o) {
@@ -384,6 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
     moduleStartAt = nowMs(); briefedModuleId = null;
     navigateTo('screen-ar-scene');
   }
+  document.getElementById('card-mod0')?.addEventListener('click', () => startModule(TRAINING_MODULES.mod0));
   document.getElementById('card-mod1')?.addEventListener('click', () => startModule(TRAINING_MODULES.mod1));
   document.getElementById('card-mod2')?.addEventListener('click', () => startModule(TRAINING_MODULES.mod2));
   document.getElementById('card-mod3')?.addEventListener('click', () => startModule(TRAINING_MODULES.mod3));

@@ -38,6 +38,7 @@ The gap is not *knowledge* — it is *behavior under pressure*. A rule read in a
 - Data persists in `localStorage` (offline, no backend).
 
 ### Training modules
+- **Practice — Learn the App** (marked START HERE, first card): a gentle, zero-pressure run that teaches the three gestures every module uses — **move the phone to find, tap the glowing object, choose an answer** — with a persistent 1‑2‑3 guide strip and short spoken cues in the worker's language.
 - **Module 1 — Gas Leak & Confined Space** (3 steps)
 - **Module 2 — Fire & Explosion Response** (3 steps)
 - **Module 3 — Machinery & Equipment Safety** (machine guarding, lockout‑tagout, conveyor/crusher safe operation — 3 steps)

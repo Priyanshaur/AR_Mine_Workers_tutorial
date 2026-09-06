@@ -2,6 +2,130 @@
 // Every step: find & select the correct object among several, then answer to progress.
 
 const TRAINING_MODULES = {
+
+  "mod0": {
+    "id": "mod0",
+    "titleKey": "mod0_title",
+    "alarmTextKey": "alarm_gas",
+    "calloutLabelKey": "gas_conc",
+    "calloutValKey": "conc_rising",
+    "skills": [
+      "gas_detect"
+    ],
+    "briefing": {
+      "en": "This is practice. There is no score pressure. First you will MOVE your phone to look around. Then TAP the glowing object. Then choose an answer. Let's try!",
+      "hi": "यह अभ्यास है। कोई दबाव नहीं है। पहले फ़ोन घुमाकर देखें। फिर चमकती वस्तु दबाएँ। फिर उत्तर चुनें। चलिए!",
+      "sat": "ᱱᱚᱣᱟ ᱪᱮᱫᱚᱜ ᱠᱟᱱᱟ᱾ ᱯᱩᱭᱞᱩ ᱠᱮᱢᱮᱨᱟ ᱟᱹᱪᱩᱨ ᱠᱟᱛᱮ ᱧᱮᱞ ᱢᱮ᱾ ᱤᱱᱟᱹ ᱛᱟᱭᱚᱢ ᱢᱟᱨᱥᱟᱞ ᱡᱤᱱᱤᱥ ᱴᱤᱯᱟᱹᱣ ᱢᱮ᱾"
+    },
+    "steps": [
+      {
+        "id": "p1",
+        "prompt": {
+          "en": "Find the BIG GREEN gas cylinder.",
+          "hi": "बड़ा हरा गैस सिलेंडर खोजें।",
+          "sat": "ᱢᱟᱨᱟᱝ ᱦᱟᱹᱨᱤᱭᱟᱹᱹ ᱥᱤᱲᱤᱱᱰᱟᱨ ᱥᱮᱸᱫᱽᱨᱟ᱾"
+        },
+        "objects": [
+          {
+            "key": "cylinder",
+            "name": {
+              "en": "Gas cylinder",
+              "hi": "गैस सिलेंडर",
+              "sat": "ᱜᱮᱥ ᱥᱤᱲᱤᱱᱰᱟᱨ"
+            },
+            "correct": true,
+            "offset": 0,
+            "far": false
+          },
+          {
+            "key": "bucket",
+            "name": {
+              "en": "Water bucket",
+              "hi": "पानी की बाल्टी",
+              "sat": "ᱫᱟᱜ ᱵᱟᱹᱞᱴᱤ"
+            },
+            "correct": false,
+            "offset": 120,
+            "far": false
+          },
+          {
+            "key": "torch",
+            "name": {
+              "en": "Electric torch",
+              "hi": "बिजली की टॉर्च",
+              "sat": "ᱴᱚᱨᱪ"
+            },
+            "correct": false,
+            "offset": 240,
+            "far": false
+          }
+        ],
+        "timerSeconds": 30,
+        "question": {
+          "en": "You found it! A gas cylinder can be dangerous. What should you do first?",
+          "hi": "मिल गया! गैस सिलेंडर खतरनाक हो सकता है। सबसे पहले क्या करें?",
+          "sat": "ᱧᱟᱢ ᱮᱱᱟ! ᱜᱮᱥ ᱥᱤᱲᱤᱱᱰᱟᱨ ᱵᱚᱛᱚᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ᱾ ᱯᱩᱭᱞᱩ ᱪᱮᱫ ᱪᱤᱠᱟᱹᱭ ᱢᱮ?"
+        },
+        "choices": [
+          {
+            "id": "A",
+            "letter": "A",
+            "correct": true,
+            "text": {
+              "en": "Stay back and call the supervisor",
+              "hi": "पीछे हटें और सुपरवाइजर को बुलाएँ",
+              "sat": "ᱛᱤᱸᱜᱩᱱ ᱢᱮ ᱟᱨ ᱥᱩᱯᱚᱨᱵᱷᱟᱭᱡᱚᱨ ᱦᱚᱦᱚ ᱟᱭ ᱢᱮ"
+            }
+          },
+          {
+            "id": "B",
+            "letter": "B",
+            "correct": false,
+            "text": {
+              "en": "Touch it with your bare hands",
+              "hi": "इसे खाली हाथों से छुएँ",
+              "sat": "ᱛᱤ ᱛᱮ ᱥᱟᱵ ᱢᱮ"
+            },
+            "consequence": {
+              "title": {
+                "en": "TOO CLOSE",
+                "hi": "बहुत पास",
+                "sat": "ᱥᱩᱨ"
+              },
+              "explanation": {
+                "en": "Never touch an unknown cylinder. Gas can harm you without any warning. Always stay back and call for help.",
+                "hi": "अनजान सिलेंडर को कभी न छुएँ। गैस बिना चेतावनी नुकसान पहुँचा सकती है।",
+                "sat": "ᱵᱟᱝ ᱵᱟᱰᱟᱭ ᱥᱤᱲᱤᱱᱰᱟᱨ ᱟᱞᱚᱢ ᱥᱟᱵᱟ᱾"
+              }
+            }
+          },
+          {
+            "id": "C",
+            "letter": "C",
+            "correct": false,
+            "text": {
+              "en": "Light a match to see it better",
+              "hi": "बेहतर देखने के लिए माचिस जलाएँ",
+              "sat": "ᱥᱮᱸᱜᱮᱞ ᱡᱩᱞ ᱢᱮ"
+            },
+            "consequence": {
+              "title": {
+                "en": "FIRE RISK",
+                "hi": "आग का खतरा",
+                "sat": "ᱥᱮᱸᱜᱮᱞ"
+              },
+              "explanation": {
+                "en": "A flame near gas can cause a fire. Never bring fire anywhere near gas.",
+                "hi": "गैस के पास आग से आग लग सकती है।",
+                "sat": "ᱜᱮᱥ ᱥᱩᱨ ᱥᱮᱸᱜᱮᱞ ᱟᱞᱚᱢ᱾"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+,
   "mod1": {
     "id": "mod1",
     "titleKey": "mod1_title",
@@ -1837,6 +1961,13 @@ const TRAINING_MODULES = {
 
 // Adaptive coaching hints, keyed by moduleId.stepIndex. Shown on retry only.
 const STEP_HINTS = {
+
+  "mod0.0": {
+    "en": "Look for the tall green bottle with the red top.",
+    "hi": "लाल ऊपर वाले लंबे हरे सिलेंडर को देखें।",
+    "sat": "ᱩᱥᱩᱞ ᱦᱟᱹᱨᱤᱭᱟᱹᱹ ᱥᱤᱲᱤᱱᱰᱟᱨ ᱧᱮᱞ ᱢᱮ᱾"
+  }
+,
   "mod1.0": {
     en: "Gas needs a spark to ignite. When in doubt, clear the area first, then return with breathing apparatus.",
     hi: "à¤—à¥ˆà¤¸ à¤•à¥‹ à¤†à¤— à¤ªà¤•à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤šà¤¿à¤‚à¤—à¤¾à¤°à¥€ à¤šà¤¾à¤¹à¤¿à¤à¥¤ à¤¸à¤‚à¤¦à¥‡à¤¹ à¤¹à¥‹à¤¨à¥‡ à¤ªà¤° à¤ªà¤¹à¤²à¥‡ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤–à¤¾à¤²à¥€ à¤•à¤°à¥‡à¤‚, à¤«à¤¿à¤° à¤¶à¥à¤µà¤¾à¤¸ à¤‰à¤ªà¤•à¤°à¤£ à¤•à¥‡ à¤¸à¤¾à¤¥ à¤²à¥Œà¤Ÿà¥‡à¤‚à¥¤",

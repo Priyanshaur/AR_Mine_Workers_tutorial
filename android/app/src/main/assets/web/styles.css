@@ -787,3 +787,14 @@ body {
 .dash-details summary::before { content: "▸ "; color: var(--cyan); }
 .dash-details[open] summary::before { content: "▾ "; }
 .dash-details > div { margin-top: 10px; }
+
+/* ── Guided stepper (always-visible 1-2-3 for first-time workers) ──────────── */
+.guide-stepper { display: flex; gap: 6px; padding: 10px 14px 4px; flex-shrink: 0; }
+.guide-step { flex: 1; display: flex; align-items: center; gap: 6px; font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.02em; color: var(--muted); background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 7px 8px; opacity: 0.55; transition: opacity 0.2s, border-color 0.2s, color 0.2s; }
+.guide-step b { font-size: 13px; }
+.guide-step.active { opacity: 1; color: var(--text); border-color: var(--cyan); box-shadow: 0 0 12px rgba(79,227,193,0.25); }
+.guide-step.active b { color: var(--cyan); }
+
+/* ── Practice card ─────────────────────────────────────────────────────────── */
+.mod-card.practice { border-color: rgba(79,227,193,0.45); }
+.practice-tag { background: rgba(79,227,193,0.14); color: var(--cyan); border: 1px solid rgba(79,227,193,0.4); }

@@ -49,6 +49,7 @@ const ChainEngine = {
     this._initialBearing = null;
     this._orientationLive = false;
     this._active = true;
+    this._firedFocus = false;
 
     // Randomise object placement each run so the correct one isn't in a fixed spot.
     const offsets = nodeObjects.map(o => o.offset || 0);
@@ -77,6 +78,7 @@ const ChainEngine = {
 
   stop: function () {
     this._active = false;
+    this._firedFocus = false;
     if (this._handler) { window.removeEventListener('deviceorientation', this._handler, true); this._handler = null; }
     if (this._raf) { cancelAnimationFrame(this._raf); this._raf = null; }
     if (this.el) { this.el.innerHTML = ''; this.el = null; }
@@ -142,6 +144,17 @@ const ChainEngine = {
       }
     });
     this.focusIndex = best;
+
+    // Nudge the worker to TAP once an object is first centred (guided onboarding)
+    if (live && !this._firedFocus) {
+      for (let k = 0; k < btns.length; k++) {
+        if (btns[k] && btns[k].classList.contains('focused')) {
+          this._firedFocus = true;
+          if (this._callbacks && this._callbacks.onFirstFocus) this._callbacks.onFirstFocus();
+          break;
+        }
+      }
+    }
 
     // Scout readout: name + direction of the nearest object (helps identification & tracking)
     const scout = document.getElementById('chain-scout');

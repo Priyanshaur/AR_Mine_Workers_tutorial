@@ -11,6 +11,11 @@ const I18N_DATA = {
     
     // Module Selection
     select_module: "Select Training Module",
+    mod0_title: "Practice: Learn the App",
+    mod0_desc: "A gentle first run — find, tap, answer. No pressure.",
+    guide_look: "Move phone to FIND",
+    guide_tap: "TAP the glowing object",
+    guide_answer: "Choose an ANSWER",
     mod1_title: "Module 1: Gas Leak & Confined Space",
     mod1_desc: "Hazardous gas detection, explosive limits & entry protocols",
     mod2_title: "Module 2: Fire & Explosion Response",
@@ -126,6 +131,11 @@ const I18N_DATA = {
     
     // Module Selection
     select_module: "प्रशिक्षण मॉड्यूल चुनें",
+    mod0_title: "अभ्यास: ऐप सीखें",
+    mod0_desc: "पहली आसान कोशिश — खोजें, दबाएँ, उत्तर दें। कोई दबाव नहीं।",
+    guide_look: "फ़ोन घुमाकर खोजें",
+    guide_tap: "चमकती वस्तु दबाएँ",
+    guide_answer: "उत्तर चुनें",
     mod1_title: "मॉड्यूल 1: गैस रिसाव एवं सीमित स्थान",
     mod1_desc: "खतरनाक गैस पहचान, विस्फोटक सीमाएं और प्रवेश प्रोटोकॉल",
     mod2_title: "मॉड्यूल 2: आग और विस्फोट प्रतिक्रिया",
@@ -242,6 +252,11 @@ const I18N_DATA = {
     
     // Module Selection
     select_module: "ᱴᱨᱮᱱᱤᱝ ᱢᱚᱰᱭᱩᱞ ᱪᱚᱭᱚᱱ ᱢᱮ",
+    mod0_title: "ᱪᱮᱫᱚᱜ: ᱮᱯ ᱪᱮᱫ",
+    mod0_desc: "ᱯᱩᱭᱞᱩ ᱟᱹᱰᱤ ᱥᱮᱸᱫᱽᱨᱟ — ᱥᱮᱸᱫᱽᱨᱟ, ᱴᱤᱯᱟᱹᱣ, ᱡᱟᱵᱟᱵ᱾",
+    guide_look: "ᱠᱮᱢᱮᱨᱟ ᱟᱹᱪᱩᱨ ᱠᱟᱛᱮ ᱥᱮᱸᱫᱽᱨᱟ",
+    guide_tap: "ᱢᱟᱨᱥᱟᱞ ᱡᱤᱱᱤᱥ ᱴᱤᱯᱟᱹᱣ",
+    guide_answer: "ᱡᱟᱵᱟᱵ ᱪᱩᱱᱟᱹᱣ",
     mod1_title: "ᱢᱚᱰᱭᱩᱞ ᱑: ᱜᱮᱥ ᱞᱤᱠ ᱟᱨ ᱥᱚᱝᱠᱚᱨ ᱴᱷᱟᱶ",
     mod1_desc: "ᱵᱚᱛᱚᱨᱟᱱ ᱜᱮᱥ ᱧᱟᱢ, ᱵᱚᱢ ᱵᱤᱥᱯᱷᱚᱴ ᱥᱤᱢᱟᱹ ᱟᱨ ᱵᱚᱞᱚᱱ ᱱᱤᱭᱚᱢ",
     mod2_title: "ᱢᱚᱰᱭᱩᱞ ᱒: ᱥᱮᱸᱜᱮᱞ ᱟᱨ ᱵᱤᱥᱯᱷᱚᱴ ᱨᱩᱣᱟᱹᱲ",

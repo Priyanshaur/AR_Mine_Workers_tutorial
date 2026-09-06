@@ -107,6 +107,15 @@
         <p style="font-size:12px; color:#868D93;" data-i18n="subtitle">Mining & Industrial AR Safety System</p>
       </div>
 
+      <div id="card-mod0" class="mod-card practice">
+        <div class="mod-card-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-2.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0v4c0 3-2 6-5.5 6S7 17 6 14l-1-2.5c-.4-1 .8-2 1.7-1.3L9 12" stroke="#4FE3C1" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="mod-card-tag practice-tag">START HERE</span>
+        <div class="mod-title" data-i18n="mod0_title">Practice: Learn the App</div>
+        <div class="mod-desc" data-i18n="mod0_desc">A gentle first run — find, tap, answer. No pressure.</div>
+      </div>
+
       <div id="card-mod1" class="mod-card">
         <div class="mod-card-icon" aria-hidden="true">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="3" rx="1.5" fill="#4FE3C1"/><circle cx="7" cy="11.5" r="3" fill="#FF5233"/><circle cx="7" cy="11.5" r="1.2" fill="#F4F2EC"/></svg>
@@ -159,6 +168,11 @@
 
     <!-- Screen 2: AR HUD Decision Scene -->
     <div id="screen-ar-scene" class="app-screen">
+      <div id="guide-stepper" class="guide-stepper">
+        <span class="guide-step active" data-phase="find"><b>①</b><span data-i18n="guide_look">Move phone to FIND</span></span>
+        <span class="guide-step" data-phase="tap"><b>②</b><span data-i18n="guide_tap">TAP the glowing object</span></span>
+        <span class="guide-step" data-phase="answer"><b>③</b><span data-i18n="guide_answer">Choose an ANSWER</span></span>
+      </div>
       <div class="ar-stage">
         <video id="ar-camera-video" class="ar-video" autoplay playsinline muted></video>
         <canvas id="ar-hud-canvas" class="ar-canvas"></canvas>
