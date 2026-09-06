@@ -9,6 +9,7 @@ let wrongTurnsInSession = [];
 let sessionScore = 96;
 let sessionResponseTimes = [];
 let currentUser = null;
+let certSavedKey = null;    // guards the certificate result so it is saved once per completion
 let answerArmedAt = null;   // when the question finishing the find became visible
 let moduleStartAt = null;   // when the current module run started (for duration)
 let briefedModuleId = null; // which module's briefing has been shown this session
@@ -39,7 +40,7 @@ function homeFor(user) {
 
 function navigateTo(screenId, isBackNavigation = false) {
   TTSEngine.stop();
-  if (!isBackNavigation && currentScreen !== screenId) navigationHistory.push(screenId);
+  if (!isBackNavigation && currentScreen !== screenId && navigationHistory[navigationHistory.length - 1] !== screenId) navigationHistory.push(screenId);
 
   document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
   const target = document.getElementById(screenId);
@@ -69,12 +70,16 @@ function navigateTo(screenId, isBackNavigation = false) {
     window.sessionScore = sessionScore;
     CertificateModule.init(document.getElementById('worker-name-input'), 'cert-qr-holder', sessionScore, activeModule.id, pathStr);
     if (currentUser && currentUser.role === 'worker') {
-      SLStore.saveResult({
-        workerId: currentUser.workerId, moduleId: activeModule.id, score: sessionScore, path: pathStr,
-        mistakes: wrongTurnsInSession.length,
-        seconds: Math.max(0, Math.round((nowMs() - moduleStartAt) / 1000)),
-        skillKeys: activeModule.skills || []
-      });
+      const saveKey = activeModule.id + '|' + sessionScore + '|' + wrongTurnsInSession.join(',');
+      if (certSavedKey !== saveKey) {
+        certSavedKey = saveKey;
+        SLStore.saveResult({
+          workerId: currentUser.workerId, moduleId: activeModule.id, score: sessionScore, path: pathStr,
+          mistakes: wrongTurnsInSession.length,
+          seconds: Math.max(0, Math.round((nowMs() - moduleStartAt) / 1000)),
+          skillKeys: activeModule.skills || []
+        });
+      }
     }
     const timeEl = document.getElementById('cert-time-val');
     if (timeEl) timeEl.textContent = sessionResponseTimes.length
@@ -91,7 +96,14 @@ function navigateTo(screenId, isBackNavigation = false) {
 function goBack() {
   if (navigationHistory.length > 1) {
     navigationHistory.pop();
-    navigateTo(navigationHistory[navigationHistory.length - 1], true);
+    let target = navigationHistory[navigationHistory.length - 1];
+    // Skip a finished AR scene: re-entering it would instantly bounce forward
+    // to the certificate again (no steps remain), making Back look broken.
+    while (target === 'screen-ar-scene' && (!activeModule.steps || moduleStepIndex >= activeModule.steps.length) && navigationHistory.length > 1) {
+      navigationHistory.pop();
+      target = navigationHistory[navigationHistory.length - 1];
+    }
+    navigateTo(target, true);
   } else {
     navigateTo('screen-login', true);
   }
@@ -227,7 +239,8 @@ function wrongSelect(step, o) {
 
 function handleChoiceSelection(choiceId) {
   const step = activeModule.steps[moduleStepIndex];
-  const selectedChoice = step && step.choices.find(c => c.id === choiceId);
+  if (!step) return; // module already finished (e.g. double-tap on the final answer) — ignore
+  const selectedChoice = step.choices.find(c => c.id === choiceId);
 
   if (answerArmedAt != null) sessionResponseTimes.push(Math.max(0, (nowMs() - answerArmedAt) / 1000));
 
@@ -395,7 +408,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function startModule(m) {
     activeModule = m; moduleStepIndex = 0; wrongTurnsInSession = []; sessionScore = 96; sessionResponseTimes = [];
-    moduleStartAt = nowMs(); briefedModuleId = null;
+    moduleStartAt = nowMs(); briefedModuleId = null; certSavedKey = null;
     navigateTo('screen-ar-scene');
   }
   document.getElementById('card-mod0')?.addEventListener('click', () => startModule(TRAINING_MODULES.mod0));
