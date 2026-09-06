@@ -1,0 +1,16 @@
+{
+  "name": "SafetyLens AR Mobile",
+  "short_name": "SafetyLens AR",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#08090A",
+  "theme_color": "#0F1214",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "index.html",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
