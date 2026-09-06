@@ -5,6 +5,7 @@ const ASSETS = [
   'styles.css',
   'manifest.json',
   'js/i18n.js',
+  'js/firebase-config.js',
   'js/store.js',
   'js/modules.js',
   'js/qrcode.min.js',

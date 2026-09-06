@@ -93,7 +93,7 @@ Each step is a **multi‑object search chain**:
 | QR decode | **jsQR** (bundled) + `BarcodeDetector` |
 | Offline | Service Worker cache + `localStorage` |
 | i18n | Dictionary (en / hi / sat) |
-| Persistence | LocalStorage (roles, clans, workers, results) |
+| Persistence | **Firestore + Firebase Auth** (realtime, offline‑persisted) with a LocalStorage fallback |
 | Mobile shell | Kotlin **WebView**, `minSdk 24`, `compileSdk 34` |
 
 **Deliberately not used:** Unity, ARCore, Three.js, ML object detection, server backend, real SMS/notifications.
@@ -150,8 +150,15 @@ SIH_AR/
 
 **Built, verified, and packaged in a debug APK.** All logic is regression‑tested via a headless harness (auth, clan scoping, dashboard, chain flow, HMAC, QR round‑trip).
 
+### Cloud sync (Firebase) — scaffolded
+The app ships with a bundled **Firebase SDK** (`js/firebase-bundle.js`) and a **Firestore + Auth** data layer (`js/firebase-config.js`, `js/store.js`). When enabled it:
+- uses **Firestore** for `clans`, `workers`, and `certificates`, with **built‑in offline persistence** — writes queue locally and sync when connectivity returns, so the offline requirement is retained;
+- uses **Firebase Auth** for real logins (email/password for admins, anonymous + Firestore doc for workers);
+- feeds realtime **`onSnapshot`** listeners into an in‑memory cache, so the **admin dashboard queries real Firestore data scoped to `clanId`** (seed data gone).
+**To go live:** paste your Firebase web config into `js/firebase-config.js` and set `ENABLED: true`, enable Firestore + Email/Password auth, then rebuild. Until then the app runs in offline LocalStorage mode.
+
 **Known limitations / next steps:**
-- **No backend** — accounts/results are client‑side `localStorage`, so they reset if app data cleared and don't sync across devices.
+- By default it uses **client‑side `localStorage`** (no backend), so data doesn't sync across devices until Firebase is enabled.
 - The **walk‑closer** gate is motion‑based with a fallback (indoor accelerometers are unreliable).
 - **Release‑signed APK** not produced yet (debug APK is sideloadable for the demo).
 - **Demo video** not yet recorded.

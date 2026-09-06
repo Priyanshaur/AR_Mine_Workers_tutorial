@@ -317,18 +317,20 @@ function applySessionUI(user) {
   const dashLink = document.getElementById('nav-dashboard-link');
   if (dashLink) dashLink.style.display = (user && user.role === 'admin') ? 'block' : 'none';
 }
-function doLogin(worker, admin) {
+async function doLogin(worker, admin) {
   if (worker) {
     const name = document.getElementById('login-worker-name').value;
     const clan = document.getElementById('login-clan-select').value;
-    SLStore.loginWorker(name, clan);
+    const res = await SLStore.loginWorker(name, clan);
+    if (res && res.ok) { routeHome(); return; }
+    const m = document.getElementById('login-msg'); if (m) m.textContent = 'Could not join clan — try again.';
   } else {
     const u = document.getElementById('login-admin-user').value;
     const p = document.getElementById('login-admin-pass').value;
-    const res = SLStore.loginAdmin(u, p);
-    if (!res.ok) { const m = document.getElementById('login-msg-admin'); if (m) m.textContent = 'Invalid credentials'; return; }
+    const res = await SLStore.loginAdmin(u, p);
+    if (res && res.ok) { routeHome(); return; }
+    const m = document.getElementById('login-msg-admin'); if (m) m.textContent = 'Invalid credentials';
   }
-  routeHome();
 }
 
 // ── Intro hero count-up (visual only) ────────────────────────────────────────────
@@ -371,8 +373,8 @@ document.addEventListener('DOMContentLoaded', function () {
   populateClanSelect();
   document.getElementById('btn-worker-login')?.addEventListener('click', () => doLogin(true, false));
   document.getElementById('btn-admin-login')?.addEventListener('click', () => doLogin(false, true));
-  document.getElementById('quick-admin')?.addEventListener('click', () => { if (SLStore.loginAdmin('admin','safety123').ok) routeHome(); });
-  document.getElementById('quick-worker')?.addEventListener('click', () => { if (SLStore.loginWorker('Ramesh Kumar','clan-mine3').ok) routeHome(); });
+  document.getElementById('quick-admin')?.addEventListener('click', async () => { const r = await SLStore.loginAdmin('admin','safety123'); if (r && r.ok) routeHome(); });
+  document.getElementById('quick-worker')?.addEventListener('click', async () => { const r = await SLStore.loginWorker('Ramesh Kumar','clan-mine3'); if (r && r.ok) routeHome(); });
   document.getElementById('btn-logout')?.addEventListener('click', () => { SLStore.logout(); currentUser = null; applySessionUI(null); navigateTo('screen-login'); });
 
   document.getElementById('btn-intro-continue')?.addEventListener('click', () => routeHome());
