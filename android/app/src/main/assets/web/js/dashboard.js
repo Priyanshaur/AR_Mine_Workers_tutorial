@@ -28,7 +28,7 @@ const DashboardModule = {
 
   renderClanHeader: function () {
     const el = document.getElementById('dash-clan');
-    if (el) el.textContent = (this.clan ? this.clan.name : '') + ' · ' + this.workers.length + ' workers';
+    if (el) el.textContent = (this.clan ? (this.clan.name || this.clan.Name || '') : '') + ' · ' + this.workers.length + ' workers';
   },
 
   renderKPIs: function (id) {
