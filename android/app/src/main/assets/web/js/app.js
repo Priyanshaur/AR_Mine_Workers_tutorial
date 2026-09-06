@@ -157,6 +157,18 @@ function renderStepUI() {
   const stepEl = document.getElementById('ar-step-indicator');
   if (stepEl) stepEl.textContent = `${t('step')} ${moduleStepIndex + 1}/${activeModule.steps.length}`;
 
+  // numbered step sequence: done / current / upcoming
+  const seq = document.getElementById('step-sequence');
+  if (seq) {
+    let dots = '';
+    for (let i = 0; i < activeModule.steps.length; i++) {
+      const cls = i < moduleStepIndex ? 'done' : (i === moduleStepIndex ? 'current' : '');
+      dots += `<span class="seq-dot ${cls}">${i + 1}</span>`;
+      if (i < activeModule.steps.length - 1) dots += '<span class="seq-line"></span>';
+    }
+    seq.innerHTML = `<span class="seq-label">${t('step')} ${moduleStepIndex + 1}/${activeModule.steps.length}</span><span class="seq-dots">${dots}</span>`;
+  }
+
   // prompt
   const cp = document.getElementById('chain-prompt');
   if (cp) { cp.textContent = (step.prompt[currentLang] || step.prompt['en']); cp.classList.add('active'); }

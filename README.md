@@ -45,6 +45,8 @@ The gap is not *knowledge* — it is *behavior under pressure*. A rule read in a
 - **Module 4 — Electrical Hazard Safety** (arc flash, high‑voltage lockout, wet‑condition equipment — 3 steps)
 - **Module 5 — Transport & Heavy Vehicle Safety** (haul‑truck blind spots, dumper awareness, safe pedestrian‑vehicle separation — 3 steps)
 
+A persistent **1‑2‑3 guide strip** (find → tap → answer, spoken aloud) and a numbered **step‑sequence strip** (done / current / upcoming) keep every worker oriented; large high‑contrast AR objects make each candidate easy to identify.
+
 Each step is a **multi‑object search chain**:
 1. A **scenario briefing** introduces the situation.
 2. A prompt + an **identification clue** tell you what to look for.

@@ -139,7 +139,8 @@ const ChainEngine = {
         b.style.left = s + '%';
         const y = (o.far ? 55 : 50);
         b.style.top = y + '%';
-        b.style.transform = 'translate(-50%,-50%) scale(' + (live ? (near ? 1.18 : Math.max(0.72, 1.0 - Math.abs(this._deltaFor(o.offset||0)) / 240)) : 1) + ')';
+        b.style.transform = 'translate(-50%,-50%) scale(' + (live ? (near ? 1.3 : Math.max(0.8, 1.0 - Math.abs(this._deltaFor(o.offset||0)) / 240)) : 1) + ')';
+        b.style.zIndex = near ? 5 : 1;
         b.classList.toggle('focused', live ? near : false);
       }
     });

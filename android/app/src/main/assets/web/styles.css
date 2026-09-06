@@ -356,7 +356,7 @@ body {
 }
 
 .ar-object-stage {
-  width: 200px; height: 200px;
+  width: 264px; height: 264px;
   transform-style: preserve-3d;
   transform: perspective(560px) rotateX(2deg) rotateY(0deg) scale(1);
   will-change: transform;
@@ -370,7 +370,7 @@ body {
 @keyframes objFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
 
 .ar-object-float svg {
-  display: none; width: 150px; height: auto; max-height: 150px;
+  display: none; width: 204px; height: auto; max-height: 204px;
   filter: drop-shadow(0 14px 26px rgba(0,0,0,0.6)) drop-shadow(0 0 14px rgba(79,227,193,0.25));
 }
 .ar-object-viewport[data-object="cylinder"] .ar-object-float svg[data-object="cylinder"],
@@ -647,12 +647,12 @@ body {
 }
 .chain-obj {
   position: absolute; transform: translate(-50%,-50%);
-  width: 88px; height: 88px; border: none; background: transparent; cursor: pointer;
-  opacity: 0.55; transition: opacity 0.2s, transform 0.1s; pointer-events: auto;
+  width: 116px; height: 130px; border: none; background: transparent; cursor: pointer;
+  opacity: 0.6; transition: opacity 0.2s, transform 0.1s; pointer-events: auto;
 }
-.chain-obj-inner { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
-.chain-obj-inner svg { width: 60px; height: auto; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.55)); animation: chainIdle 3s ease-in-out infinite; }
-.chain-obj-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #fff; background: rgba(8,9,10,0.7); padding: 2px 5px; border-radius: 3px; }
+.chain-obj-inner { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+.chain-obj-inner svg { width: 92px; height: auto; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.55)); animation: chainIdle 3s ease-in-out infinite; }
+.chain-obj-name { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #fff; background: rgba(8,9,10,0.78); padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
 .chain-obj.focused { opacity: 1; }
 .chain-obj.focused .chain-obj-inner svg { filter: drop-shadow(0 0 16px rgba(79,227,193,0.7)) drop-shadow(0 6px 12px rgba(0,0,0,0.55)); }
 .chain-obj.far .chain-obj-name { color: var(--bg); background: var(--amber); }
@@ -794,6 +794,16 @@ body {
 .guide-step b { font-size: 13px; }
 .guide-step.active { opacity: 1; color: var(--text); border-color: var(--cyan); box-shadow: 0 0 12px rgba(79,227,193,0.25); }
 .guide-step.active b { color: var(--cyan); }
+
+/* ── Module step sequence (numbered progress through the steps) ────────────── */
+.step-sequence { display: flex; align-items: center; gap: 8px; padding: 8px 14px 2px; flex-shrink: 0; }
+.seq-label { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; color: var(--amber); white-space: nowrap; }
+.seq-dots { display: flex; align-items: center; gap: 4px; }
+.seq-dot { width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; color: var(--muted); background: var(--panel); border: 1px solid var(--border); }
+.seq-dot.done { color: var(--bg); background: var(--cyan); border-color: var(--cyan); }
+.seq-dot.current { color: var(--amber); border-color: var(--amber); box-shadow: 0 0 12px rgba(255,176,32,0.45); animation: seqPulse 1.6s ease-in-out infinite; }
+@keyframes seqPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+.seq-line { width: 10px; height: 2px; background: var(--border); }
 
 /* ── Practice card ─────────────────────────────────────────────────────────── */
 .mod-card.practice { border-color: rgba(79,227,193,0.45); }
