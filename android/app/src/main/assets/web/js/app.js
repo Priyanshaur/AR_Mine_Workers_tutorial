@@ -186,6 +186,10 @@ function setGuide(phase) {
 }
 
 function renderStepUI() {
+  // The step UI lives on the AR scene screen — if we were called from an
+  // interstitial screen (found / correct), go back there first. navigateTo
+  // re-enters via startARModule, so this cannot recurse.
+  if (currentScreen !== 'screen-ar-scene') { navigateTo('screen-ar-scene'); return; }
   ARHUDEngine.stop();
   ChainEngine.stop();
   hideApproach();
@@ -688,7 +692,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('btn-ar-torch')?.addEventListener('click', () => toggleTorch());
 
   // Found / correct / complete flow
-  document.getElementById('btn-found-next')?.addEventListener('click', () => { if (foundStep) revealQuestion(foundStep); });
+  document.getElementById('btn-found-next')?.addEventListener('click', () => { if (foundStep) { navigateTo('screen-ar-scene'); revealQuestion(foundStep); } });
   document.getElementById('btn-correct-next')?.addEventListener('click', () => advanceStep());
   document.getElementById('btn-complete-cert')?.addEventListener('click', () => navigateTo('screen-certificate'));
   document.getElementById('btn-complete-next')?.addEventListener('click', () => navigateTo('screen-mod-select'));
