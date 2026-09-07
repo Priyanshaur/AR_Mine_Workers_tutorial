@@ -47,8 +47,14 @@ const ParticleEngine = {
     if (!self.ctx || !self.canvas) return;
     const w = self.canvas.width;
     const h = self.canvas.height;
+    let last = 0;
+    const INTERVAL = 33; // ~30fps, matching chain/panorama for mid-range devices
 
-    function loop() {
+    function loop(ts) {
+      // schedule first so stop() can cancel; throttle to ~30fps
+      self.animId = requestAnimationFrame(loop);
+      if (ts - last < INTERVAL) return;
+      last = ts;
       self.ctx.clearRect(0, 0, w, h);
       
       // Radial glow gradient background
@@ -75,10 +81,8 @@ const ParticleEngine = {
         self.ctx.fillStyle = p.color + p.alpha + ")";
         self.ctx.fill();
       }
-
-      self.animId = requestAnimationFrame(loop);
     }
 
-    loop();
+    self.animId = requestAnimationFrame(loop);
   }
 };

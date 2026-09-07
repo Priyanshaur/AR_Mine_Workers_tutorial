@@ -274,7 +274,7 @@ function renderStepUI() {
   ChainEngine.start('ar-object-grid', step.objects, {
     onFound: function (o) { if (o.correct) showFoundScreen(step, o); else wrongSelect(step, o); },
     onWrong: function (o) { wrongSelect(step, o); },
-    onFocusLost: function (o) {},
+    onWrongFocus: function () { TTSEngine.speak(t('wrong_focus')); },
     onFirstFocus: function () { setGuide('tap'); },
     onApproach: function (done) { runApproachGate(done); }
   });
@@ -575,34 +575,54 @@ function hideBriefing() {
 }
 
 // Spatial "walk" gate for far objects — motion-based with graceful fallback.
+let approachTimer = null;
+let approachHandler = null;
 function runApproachGate(done) {
   const overlay = document.getElementById('approach-overlay');
   const bar = document.getElementById('approach-bar');
   if (overlay) overlay.classList.add('active');
   if (bar) bar.style.width = '0%';
+
+  // The bar only fills as the worker actually moves the phone (detected via
+  // devicemotion). A worker who holds still sees the bar stay put and must
+  // physically walk toward the object. If the sensor never delivers data at
+  // all (desktop / permissions blocked) it falls back to a timed wait so the
+  // demo never stalls.
   const duration = 4000;
-  let total = 0, moving = 0, elapsed = 0;
+  let total = 0, moving = 0, lastMoving = 0, elapsed = 0, progress = 0;
   const handler = function (e) {
     const a = e.accelerationIncludingGravity;
     if (!a) return;
-    const mag = Math.sqrt((a.x||0)**2 + (a.y||0)**2 + (a.z||0)**2);
+    const mag = Math.sqrt((a.x || 0) ** 2 + (a.y || 0) ** 2 + (a.z || 0) ** 2);
     total++;
     if (Math.abs(mag - 9.8) > 1.8) moving++;
   };
+  approachHandler = handler;
   try { window.addEventListener('devicemotion', handler); } catch (e) {}
+
   const tick = setInterval(() => {
     elapsed += 250;
-    if (bar) bar.style.width = Math.min(100, Math.round((elapsed / duration) * 100)) + '%';
-    if (elapsed >= duration) {
+    // Advance progress only while the phone is actually moving.
+    if (moving > lastMoving) progress += 250;
+    lastMoving = moving;
+    if (bar) bar.style.width = Math.min(100, Math.round((progress / duration) * 100)) + '%';
+    const sensorDead = total === 0;
+    const doneCondition = progress >= duration || (sensorDead && elapsed >= duration);
+    if (doneCondition) {
       clearInterval(tick);
+      approachTimer = null;
       try { window.removeEventListener('devicemotion', handler); } catch (e) {}
+      approachHandler = null;
       if (overlay) overlay.classList.remove('active');
       done();
     }
   }, 250);
+  approachTimer = tick;
 }
 
 function hideApproach() {
+  if (approachTimer) { clearInterval(approachTimer); approachTimer = null; }
+  if (approachHandler) { try { window.removeEventListener('devicemotion', approachHandler); } catch (e) {} approachHandler = null; }
   const overlay = document.getElementById('approach-overlay');
   if (overlay) overlay.classList.remove('active');
 }
@@ -691,8 +711,20 @@ document.addEventListener('DOMContentLoaded', function () {
   populateClanSelect();
   document.getElementById('btn-worker-login')?.addEventListener('click', () => doLogin(true, false));
   document.getElementById('btn-admin-login')?.addEventListener('click', () => doLogin(false, true));
-  document.getElementById('quick-admin')?.addEventListener('click', async () => { const r = await SLStore.loginAdmin('admin','safety123'); if (r && r.ok) routeHome(); });
-  document.getElementById('quick-worker')?.addEventListener('click', async () => { const r = await SLStore.loginWorker('Ramesh Kumar','clan-mine3'); if (r && r.ok) routeHome(); });
+  // Demo quick-login buttons only apply to the seeded local backend. In
+  // Firebase mode the admin is a real email/password Auth user, so these would
+  // silently fail — hide them and let the worker/admin forms handle login.
+  const quickLogin = (async (fn) => {
+    const r = await fn();
+    if (r && r.ok) routeHome();
+    else if (typeof SLStore.mode === 'function' && SLStore.mode() === 'firebase') {
+      const m = document.getElementById('login-msg-admin') || document.getElementById('login-msg');
+      if (m) m.textContent = 'Quick demo login is unavailable — use the form above.';
+    }
+    return r;
+  });
+  document.getElementById('quick-admin')?.addEventListener('click', async () => { await quickLogin(() => SLStore.loginAdmin('admin', 'safety123')); });
+  document.getElementById('quick-worker')?.addEventListener('click', async () => { await quickLogin(() => SLStore.loginWorker('Ramesh Kumar', 'clan-mine3')); });
   document.getElementById('btn-logout')?.addEventListener('click', () => { SLStore.logout(); currentUser = null; applySessionUI(null); navigateTo('screen-login'); });
 
   document.getElementById('btn-intro-continue')?.addEventListener('click', () => {

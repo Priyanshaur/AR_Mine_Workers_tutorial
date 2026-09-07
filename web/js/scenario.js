@@ -249,12 +249,17 @@ const Scenario = {
     const stage = document.querySelector('.ar-stage');
     if (!stage || !stage.addEventListener) return;
     let downX = null, downY = null;
+    let lastTouchAt = 0;
     this._ts = function (e) {
       const t = e.touches && e.touches[0];
-      if (t) { downX = t.clientX; downY = t.clientY; }
+      if (t) { downX = t.clientX; downY = t.clientY; lastTouchAt = Date.now(); }
       else if (e.clientX != null) { downX = e.clientX; downY = e.clientY; }
     };
     this._tg = function (e) {
+      // Ignore the browser-synthesised mouse events that follow a real touch
+      // tap, so inspecting doesn't fire twice on mobile.
+      const isTouchLike = (e.type === 'touchstart' || e.type === 'touchend');
+      if (!isTouchLike && (Date.now() - lastTouchAt) < 600) return;
       let dx = 0, dy = 0;
       const t = e.touches && e.touches[0];
       if (t && downX != null) { dx = Math.abs(t.clientX - downX); dy = Math.abs(t.clientY - downY); }

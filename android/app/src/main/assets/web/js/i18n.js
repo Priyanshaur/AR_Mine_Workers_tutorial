@@ -16,6 +16,7 @@ const I18N_DATA = {
     guide_look: "Move phone to FIND",
     guide_tap: "TAP the glowing object",
     guide_answer: "Choose an ANSWER",
+    wrong_focus: "Move closer to the object before tapping it.",
     mod1_title: "Module 1: Gas Leak & Confined Space",
     mod1_desc: "Hazardous gas detection, explosive limits & entry protocols",
     mod2_title: "Module 2: Fire & Explosion Response",
@@ -178,6 +179,7 @@ const I18N_DATA = {
     // Dashboard
     dash_title: "Readiness Dashboard",
     dash_sub: "Mine Safety Officer Operations",
+    refresh: "Refresh",
     time_sim: "Time Simulation",
     days_passed: "days passed",
     sim_90_btn: "Simulate +90 Days Decay",
@@ -206,6 +208,7 @@ const I18N_DATA = {
     guide_look: "फ़ोन घुमाकर खोजें",
     guide_tap: "चमकती वस्तु दबाएँ",
     guide_answer: "उत्तर चुनें",
+    wrong_focus: "ऑब्जेक्ट पर और ध्यान केंद्रित करें, फिर दबाएँ।",
     mod1_title: "मॉड्यूल 1: गैस रिसाव एवं सीमित स्थान",
     mod1_desc: "खतरनाक गैस पहचान, विस्फोटक सीमाएं और प्रवेश प्रोटोकॉल",
     mod2_title: "मॉड्यूल 2: आग और विस्फोट प्रतिक्रिया",
@@ -369,6 +372,7 @@ const I18N_DATA = {
     // Dashboard
     dash_title: "तत्परता डैशबोर्ड",
     dash_sub: "खान सुरक्षा अधिकारी संचालन",
+    refresh: "रिफ़्रेश",
     time_sim: "समय सिमुलेशन",
     days_passed: "दिन बीत चुके हैं",
     sim_90_btn: "+90 दिन क्षय का सिमुलेशन करें",
@@ -397,6 +401,7 @@ const I18N_DATA = {
     guide_look: "ᱠᱮᱢᱮᱨᱟ ᱟᱹᱪᱩᱨ ᱠᱟᱛᱮ ᱥᱮᱸᱫᱽᱨᱟ",
     guide_tap: "ᱢᱟᱨᱥᱟᱞ ᱡᱤᱱᱤᱥ ᱴᱤᱯᱟᱹᱣ",
     guide_answer: "ᱡᱟᱵᱟᱵ ᱪᱩᱱᱟᱹᱣ",
+    wrong_focus: "ᱡᱤᱱᱤᱥ ᱥᱩᱨ ᱛᱮᱭ ᱯᱟᱛ, ᱛᱟᱭᱚᱢ ᱴᱤᱯᱟᱹᱣ ᱢᱮ,",
     mod1_title: "ᱢᱚᱰᱭᱩᱞ ᱑: ᱜᱮᱥ ᱞᱤᱠ ᱟᱨ ᱥᱚᱝᱠᱚᱨ ᱴᱷᱟᱶ",
     mod1_desc: "ᱵᱚᱛᱚᱨᱟᱱ ᱜᱮᱥ ᱧᱟᱢ, ᱵᱚᱢ ᱵᱤᱥᱯᱷᱚᱴ ᱥᱤᱢᱟᱹ ᱟᱨ ᱵᱚᱞᱚᱱ ᱱᱤᱭᱚᱢ",
     mod2_title: "ᱢᱚᱰᱭᱩᱞ ᱒: ᱥᱮᱸᱜᱮᱞ ᱟᱨ ᱵᱤᱥᱯᱷᱚᱴ ᱨᱩᱣᱟᱹᱲ",
@@ -562,6 +567,7 @@ const I18N_DATA = {
     // Dashboard
     dash_title: "ᱛᱟᱭᱟᱨᱤ ᱰᱮᱥᱵᱚᱨᱰ",
     dash_sub: "ᱠᱷᱟᱫᱟᱱ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱟᱯᱷᱤᱥᱚᱨ",
+    refresh: "ᱨᱩᱣᱟᱹᱲ",
     time_sim: "ᱥᱮᱨᱢᱟ/ᱢᱟᱦᱟᱸ ᱥᱤᱢᱩᱞᱮᱥᱚᱱ",
     days_passed: "ᱢᱟᱦᱟᱸ ᱯᱟᱨᱚᱢ ᱮᱱᱟ",
     sim_90_btn: "+᱙᱐ ᱢᱟᱦᱟᱸ ᱥᱤᱢᱩᱞᱮᱴ ᱢᱮ",

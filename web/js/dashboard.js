@@ -21,7 +21,7 @@ const DashboardModule = {
     this.selectedWorkerId = this.workers.length ? this.workers[0].id : null;
     this.renderClanHeader();
     this.renderKPIs('kpi-strip');
-    this.renderWorkerList('dash-worker-list');
+    this.renderWorkerList('dash-workers');
     this.renderForSelected();
     this.bindControls();
   },

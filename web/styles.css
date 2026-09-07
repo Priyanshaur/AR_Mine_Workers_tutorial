@@ -1032,7 +1032,8 @@ body {
 .parch-body { text-align: center; font-size: 13px; color: #5c554b; }
 .parch-name { text-align: center; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 23px; color: #2A2118; margin: 4px 0; }
 .parch-mod { text-align: center; font-weight: 700; font-size: 15px; color: #2A2118; margin: 4px 0 12px; }
-.parch-meta { display: flex; justify-content: space-between; gap: 8px; font-size: 11.5px; color: #5c554b; border-top: 1px dashed #b89b5e; padding-top: 10px; }
+.parch-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px; font-size: 11.5px; color: #5c554b; border-top: 1px dashed #b89b5e; padding-top: 10px; }
+.parch-meta > span { flex: 1 1 auto; min-width: 33%; }
 .parch-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
 .parch-seal { flex-shrink: 0; }
 .parch-qr { display: flex; flex-direction: column; align-items: center; gap: 4px; }

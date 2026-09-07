@@ -267,8 +267,8 @@
         <canvas id="ar-hud-canvas" class="ar-canvas"></canvas>
         <div id="ar-compass" class="ar-compass" aria-hidden="true"><span class="ar-compass-n">N</span><span id="ar-compass-needle" class="ar-compass-needle"></span></div>
         <div class="ar-tip"><span aria-hidden="true">💡</span><span data-i18n="scan_tip">Move around slowly. The object will be highlighted when you are close.</span></div>
-        <button id="btn-ar-recenter" class="ar-corner-btn left" aria-label="Recenter">◎</button>
-        <button id="btn-ar-torch" class="ar-corner-btn right" aria-label="Flashlight">🔦</button>
+        <button id="btn-ar-recenter" class="ar-corner-btn left" aria-label="Recenter">↺</button>
+        <button id="btn-ar-torch" class="ar-corner-btn right" aria-label="Flashlight" style="display:none;">🔦</button>
 
         <!-- Multi-object search chain: candidate objects placed in the AR scene -->
         <div id="ar-object-grid" class="ar-object-grid"></div>
@@ -522,6 +522,8 @@
           <div class="parch-mod" id="cert-module-val">Module 1 — Gas Leak &amp; Confined Space</div>
           <div class="parch-meta">
             <span><span data-i18n="cert_date">Date</span>: <span id="cert-date-val">2026-09-02</span></span>
+            <span><span data-i18n="cert_score">Readiness Score</span>: <span id="cert-score-val">96</span>%</span>
+            <span><span data-i18n="cert_path">Decision Path</span>: <span id="cert-path-val">Correct on first attempt</span></span>
             <span><span data-i18n="cert_id">Certificate ID</span>: <span id="cert-id-val" class="mono">SLAR-M1-2026-001</span></span>
           </div>
           <div class="parch-foot">
