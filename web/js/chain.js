@@ -40,10 +40,6 @@ const ChainEngine = {
   _callbacks: null,
   _raf: null,
   _smooth: [],
-  // Half-angle of the camera view. Objects anchored outside this cone are out
-  // of frame (hidden) until the worker physically turns toward them — like
-  // real objects sitting at fixed spots around a room, not a UI carousel.
-  VIEW_HALF: 38,
 
   start: function (containerId, nodeObjects, callbacks) {
     this.stop();
@@ -151,15 +147,12 @@ const ChainEngine = {
       if (abs < bestAbs) { bestAbs = abs; best = i; }
       const b = btns[i];
       if (!b) return;
-      // Out of frame until the worker turns toward the object's fixed bearing.
-      if (live && abs > this.VIEW_HALF) {
-        if (b.style.display !== 'none') b.style.display = 'none';
-        b.classList.remove('focused');
-        return;
-      }
       let targetX;
       if (live) {
-        targetX = Math.max(2, Math.min(98, 50 + (d / this.VIEW_HALF) * 48));
+        // Full-circle room strip: every object keeps its fixed room position
+        // and glides continuously as you turn — nothing pops in or vanishes.
+        // ±180° maps to -100%..200%; the viewport clips whatever is behind you.
+        targetX = 50 + (d / 180) * 150;
       } else {
         // touch-drag pans background + objects together (shared SLPano state)
         var dragP = (window.SLPano && typeof window.SLPano.dragDeg === 'number') ? (window.SLPano.dragDeg / 360) * 100 : 0;

@@ -150,7 +150,11 @@ function goBack() {
     let target = navigationHistory[navigationHistory.length - 1];
     // Skip a finished AR scene: re-entering it would instantly bounce forward
     // to the certificate again (no steps remain), making Back look broken.
-    while (target === 'screen-ar-scene' && (!activeModule.steps || moduleStepIndex >= activeModule.steps.length) && navigationHistory.length > 1) {
+    // Also skip forward-only interstitials (correct/complete) so Back from a
+    // fresh certificate lands on the module list, not mid-flow screens.
+    const skipTarget = (t) => t === 'screen-correct' || t === 'screen-complete'
+      || (t === 'screen-ar-scene' && (!activeModule.steps || moduleStepIndex >= activeModule.steps.length));
+    while (skipTarget(target) && navigationHistory.length > 1) {
       navigationHistory.pop();
       target = navigationHistory[navigationHistory.length - 1];
     }

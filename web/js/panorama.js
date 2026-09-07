@@ -1,10 +1,11 @@
-// SafetyLens AR — Parallax Mine Panorama Engine
+// SafetyLens AR — Panoramic Mine Background Engine
 //
-// Replaces the live camera feed with a per-module 3D-feel mine scene: three
-// tileable depth layers (far / mid / near) panning at different speeds for
-// parallax depth, plus a condition overlay (gas haze, fire glow, dust, arc
-// flashes), drifting fog and condition particles. No WebGL / ARCore needed,
-// so it runs on any mid-range Android phone and looks identical everywhere.
+// Replaces the live camera feed with a per-module mine scene: three tileable
+// tunnel layers panning as one continuous 360° panorama (near-identical speeds,
+// so it reads as a photo you look around in, not a 3D game), plus a condition
+// overlay (gas haze, fire glow, dust, arc flashes), drifting fog and condition
+// particles. No WebGL / ARCore needed, so it runs on any mid-range Android
+// phone and looks identical everywhere.
 //
 // Rotation uses the same orientation signal as the hazard objects, so the
 // background and the objects stay in sync. Touch-drag pans the scene on
@@ -15,7 +16,9 @@ window.SLPano = window.SLPano || { yaw: 0, live: false, dragDeg: 0 };
 const Panorama = {
   TILE_W: 720,
   TILE_H: 320,
-  PX: { far: 0.6, mid: 1.3, near: 2.6 }, // px shift per degree of yaw
+  // Near-identical pan speeds so the layers read as one continuous panoramic
+  // photo rather than a 3D game world; hazards glide with the room (~3.1).
+  PX: { far: 2.9, mid: 3.0, near: 3.1 }, // px shift per degree of yaw
   DRAG_K: 0.35, // degrees of pan per px of touch drag
 
   sceneId: null,

@@ -684,7 +684,7 @@ body {
 
 /* ── Multi-object chain AR ──────────────────────────────────────────────── */
 .ar-object-grid {
-  position: absolute; inset: 0; z-index: 14; pointer-events: none;
+  position: absolute; inset: 0; z-index: 14; pointer-events: none; overflow: hidden;
 }
 .chain-obj {
   position: absolute; transform: translate(-50%,-50%);
