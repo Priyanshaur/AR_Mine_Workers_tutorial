@@ -3,8 +3,15 @@
 
 let activeModule = TRAINING_MODULES.mod1;
 let moduleStepIndex = 0;
-let currentScreen = "screen-intro";
-let navigationHistory = ["screen-intro"];
+let currentScreen = "screen-splash";
+let navigationHistory = ["screen-splash"];
+let pendingRole = 'worker';
+let selectedChoiceId = null;
+let foundStep = null;
+let viewingSaved = null;
+let torchOn = false;
+let compassHandler = null;
+let currentQuestionText = '';
 let wrongTurnsInSession = [];
 let sessionScore = 96;
 let sessionResponseTimes = [];
@@ -36,6 +43,22 @@ function homeFor(user) {
   return user.role === 'admin' ? 'screen-dashboard' : 'screen-mod-select';
 }
 
+// ── Language preference (persisted) ────────────────────────────────────────────
+function getStoredLang() { try { return localStorage.getItem('sl_lang') || null; } catch (e) { return null; } }
+function langChosen() { try { return localStorage.getItem('sl_lang_set') === '1'; } catch (e) { return false; } }
+function chooseLanguage(lang) {
+  setLanguage(lang);
+  try { localStorage.setItem('sl_lang', lang); localStorage.setItem('sl_lang_set', '1'); } catch (e) {}
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
+}
+function showLoginForms() {
+  const isAdmin = pendingRole === 'admin';
+  const wf = document.getElementById('worker-login-form');
+  const af = document.getElementById('admin-login-form');
+  if (wf) wf.style.display = isAdmin ? 'none' : 'block';
+  if (af) af.style.display = isAdmin ? 'block' : 'none';
+}
+
 // ── Navigation Core ────────────────────────────────────────────────────────────
 
 function navigateTo(screenId, isBackNavigation = false) {
@@ -47,7 +70,7 @@ function navigateTo(screenId, isBackNavigation = false) {
   if (target) { target.classList.add('active'); currentScreen = screenId; }
 
   hideBriefing();
-  if (screenId !== 'screen-ar-scene') { ARHUDEngine.stop(); ChainEngine.stop(); hideApproach(); }
+  if (screenId !== 'screen-ar-scene') { ARHUDEngine.stop(); ChainEngine.stop(); hideApproach(); stopCompass(); setTorch(false); }
   if (screenId !== 'screen-consequence') ParticleEngine.stop();
   if (screenId !== 'screen-qr-verifier') QRVerifier.stopScanner();
 
@@ -55,6 +78,23 @@ function navigateTo(screenId, isBackNavigation = false) {
     TTSEngine.speak(t('stat_num') + " " + t('stat_caption'));
   } else if (screenId === 'screen-login') {
     populateClanSelect();
+    showLoginForms();
+  } else if (screenId === 'screen-splash') {
+    // static splash; auto-advance handled at boot
+  } else if (screenId === 'screen-role') {
+  } else if (screenId === 'screen-language') {
+  } else if (screenId === 'screen-mod-select') {
+    if (currentUser && currentUser.role === 'worker') renderWorkerHome();
+    setActiveTab('home');
+  } else if (screenId === 'screen-found') {
+  } else if (screenId === 'screen-correct') {
+  } else if (screenId === 'screen-complete') {
+  } else if (screenId === 'screen-certs') {
+    if (currentUser && currentUser.role === 'worker') renderCertsList();
+    setActiveTab('certs');
+  } else if (screenId === 'screen-profile') {
+    if (currentUser) renderProfile();
+    setActiveTab('profile');
   } else if (screenId === 'screen-ar-scene') {
     startARModule(activeModule);
   } else if (screenId === 'screen-consequence') {
@@ -63,29 +103,40 @@ function navigateTo(screenId, isBackNavigation = false) {
     const consText  = document.getElementById('consequence-text')?.textContent  || '';
     TTSEngine.speak(consTitle + ". " + consText);
   } else if (screenId === 'screen-certificate') {
-    const pathStr = wrongTurnsInSession.length === 0
-      ? "Correct on first attempt"
-      : "Corrected after: " + wrongTurnsInSession.join(", ");
-    window.sessionPathString = pathStr;
-    window.sessionScore = sessionScore;
-    CertificateModule.init(document.getElementById('worker-name-input'), 'cert-qr-holder', sessionScore, activeModule.id, pathStr);
-    if (currentUser && currentUser.role === 'worker') {
-      const saveKey = activeModule.id + '|' + sessionScore + '|' + wrongTurnsInSession.join(',');
-      if (certSavedKey !== saveKey) {
-        certSavedKey = saveKey;
-        SLStore.saveResult({
-          workerId: currentUser.workerId, moduleId: activeModule.id, score: sessionScore, path: pathStr,
-          mistakes: wrongTurnsInSession.length,
-          seconds: Math.max(0, Math.round((nowMs() - moduleStartAt) / 1000)),
-          skillKeys: activeModule.skills || []
-        });
+    if (viewingSaved) {
+      const rec = viewingSaved; viewingSaved = null;
+      CertificateModule.updateCertificate(rec.worker, 'cert-qr-holder', rec.score, rec.module, rec.path, rec.ts);
+      const mv = document.getElementById('cert-module-val');
+      if (mv && TRAINING_MODULES[rec.module]) mv.textContent = t(TRAINING_MODULES[rec.module].titleKey);
+      const cv = document.getElementById('cert-id-val');
+      if (cv) cv.textContent = rec.certId || ('SLAR-M' + (rec.module || 'mod1').replace('mod', '') + '-' + new Date(rec.ts || Date.now()).getFullYear() + '-001');
+    } else {
+      const pathStr = wrongTurnsInSession.length === 0
+        ? "Correct on first attempt"
+        : "Corrected after: " + wrongTurnsInSession.join(", ");
+      window.sessionPathString = pathStr;
+      window.sessionScore = sessionScore;
+      const workerName = (currentUser && currentUser.name) || 'Ramesh Kumar';
+      CertificateModule.init(document.getElementById('worker-name-input'), 'cert-qr-holder', sessionScore, activeModule.id, pathStr);
+      CertificateModule.updateCertificate(workerName, 'cert-qr-holder', sessionScore, activeModule.id, pathStr);
+      const mv = document.getElementById('cert-module-val');
+      if (mv) mv.textContent = t(activeModule.titleKey);
+      const certId = makeCertId();
+      const cv = document.getElementById('cert-id-val');
+      if (cv) cv.textContent = certId;
+      if (currentUser && currentUser.role === 'worker') {
+        const saveKey = activeModule.id + '|' + sessionScore + '|' + wrongTurnsInSession.join(',');
+        if (certSavedKey !== saveKey) {
+          certSavedKey = saveKey;
+          SLStore.saveResult({
+            workerId: currentUser.workerId, worker: workerName, moduleId: activeModule.id, score: sessionScore, path: pathStr,
+            mistakes: wrongTurnsInSession.length,
+            seconds: Math.max(0, Math.round((nowMs() - moduleStartAt) / 1000)),
+            skillKeys: activeModule.skills || [], certId: certId
+          });
+        }
       }
     }
-    const timeEl = document.getElementById('cert-time-val');
-    if (timeEl) timeEl.textContent = sessionResponseTimes.length
-      ? (sessionResponseTimes.reduce((a,b)=>a+b,0)/sessionResponseTimes.length).toFixed(1) + 's avg' : '—';
-    const skillsEl = document.getElementById('cert-skills');
-    if (skillsEl) skillsEl.innerHTML = (activeModule.skills || []).map(k => `<span class="skill-chip">${t('skill_' + k)}</span>`).join('');
     TTSEngine.speak(t('cert_title') + ". " + t('cert_sub'));
   } else if (screenId === 'screen-dashboard') {
     if (currentUser && currentUser.role === 'admin') DashboardModule.init();
@@ -110,7 +161,7 @@ function goBack() {
 }
 
 window.onAndroidBackPressed = function () {
-  if (currentScreen === 'screen-intro' || currentScreen === 'screen-login') return false;
+  if (currentScreen === 'screen-splash' || currentScreen === 'screen-intro' || currentScreen === 'screen-login') return false;
   goBack();
   return true;
 };
@@ -156,6 +207,8 @@ function renderStepUI() {
 
   const stepEl = document.getElementById('ar-step-indicator');
   if (stepEl) stepEl.textContent = `${t('step')} ${moduleStepIndex + 1}/${activeModule.steps.length}`;
+  const ts2 = document.getElementById('ar-topbar-step');
+  if (ts2) ts2.textContent = `STEP ${moduleStepIndex + 1}/${activeModule.steps.length}`;
 
   // numbered step sequence: done / current / upcoming
   const seq = document.getElementById('step-sequence');
@@ -190,9 +243,14 @@ function renderStepUI() {
   // Phase 1: FIND — guide always visible
   setGuide('find');
 
+  // AR top bar step readout
+  const ts = document.getElementById('ar-topbar-step');
+  if (ts) ts.textContent = `STEP ${moduleStepIndex + 1}/${activeModule.steps.length}`;
+  startCompass();
+
   // Place the candidate objects
   ChainEngine.start('ar-object-grid', step.objects, {
-    onFound: function (o) { if (o.correct) revealQuestion(step); else wrongSelect(step, o); },
+    onFound: function (o) { if (o.correct) showFoundScreen(step, o); else wrongSelect(step, o); },
     onWrong: function (o) { wrongSelect(step, o); },
     onFocusLost: function (o) {},
     onFirstFocus: function () { setGuide('tap'); },
@@ -200,7 +258,18 @@ function renderStepUI() {
   });
 }
 
+function showFoundScreen(step, o) {
+  const icon = document.getElementById('found-obj-icon');
+  if (icon) icon.innerHTML = (typeof CHAIN_SPRITES !== 'undefined' && CHAIN_SPRITES[o.key]) ? CHAIN_SPRITES[o.key] : '';
+  const pill = document.getElementById('found-obj-pill');
+  if (pill) pill.textContent = (o.name ? (o.name[currentLang] || o.name.en) : o.key);
+  foundStep = step;
+  navigateTo('screen-found');
+}
+
 function revealQuestion(step) {
+  selectedChoiceId = null;
+  const sub0 = document.getElementById('btn-submit-answer'); if (sub0) sub0.disabled = true;
   const panel = document.getElementById('choices-container');
   if (panel) panel.classList.remove('locked');
   const q = document.getElementById('ar-question-text');
@@ -224,10 +293,15 @@ function revealQuestion(step) {
     } else { h.style.display = 'none'; }
   }
 
+  currentQuestionText = (step.question[currentLang] || step.question['en']) || '';
   const c = document.getElementById('choices-buttons');
   if (c) {
-    c.innerHTML = step.choices.map(ch => `<button class="choice-btn" data-choice-id="${ch.id}"><span class="letter">${ch.letter}</span><span class="choice-text">${ch.text[currentLang] || ch.text['en']}</span></button>`).join('');
-    c.querySelectorAll('.choice-btn').forEach(btn => btn.addEventListener('click', function () { handleChoiceSelection(this.getAttribute('data-choice-id')); }));
+    c.innerHTML = step.choices.map(ch => `<button class="choice-row" data-choice-id="${ch.id}"><span class="letter">${ch.letter}</span><span class="choice-text">${ch.text[currentLang] || ch.text['en']}</span></button>`).join('');
+    c.querySelectorAll('.choice-row').forEach(btn => btn.addEventListener('click', function () {
+      selectedChoiceId = this.getAttribute('data-choice-id');
+      c.querySelectorAll('.choice-row').forEach(b => b.classList.toggle('selected', b === btn));
+      const sub = document.getElementById('btn-submit-answer'); if (sub) sub.disabled = false;
+    }));
   }
   answerArmedAt = nowMs();
   // Phase 3: ANSWER
@@ -258,7 +332,9 @@ function handleChoiceSelection(choiceId) {
 
   if (selectedChoice && selectedChoice.correct) {
     ChainEngine.stop();
-    advanceStep();
+    const cs = document.getElementById('correct-sub');
+    if (cs) cs.textContent = selectedChoice.text[currentLang] || selectedChoice.text['en'];
+    navigateTo('screen-correct');
   } else {
     ChainEngine.stop();
     const wrongTag = moduleNum(activeModule) + (moduleStepIndex + 1) + 'Q' + choiceId;
@@ -274,7 +350,59 @@ function handleChoiceSelection(choiceId) {
 
 function advanceStep() {
   moduleStepIndex++;
-  if (!activeModule.steps[moduleStepIndex]) { navigateTo('screen-certificate'); } else { renderStepUI(); }
+  if (!activeModule.steps[moduleStepIndex]) { showCompleteScreen(); } else { renderStepUI(); }
+}
+
+function showCompleteScreen() {
+  const secs = Math.max(0, Math.round((nowMs() - moduleStartAt) / 1000));
+  const t1 = document.getElementById('complete-time');
+  if (t1) t1.textContent = Math.floor(secs / 60) + ':' + String(secs % 60).padStart(2, '0');
+  const a1 = document.getElementById('complete-attempts');
+  if (a1) a1.textContent = wrongTurnsInSession.length + 1;
+  const s1 = document.getElementById('complete-score');
+  if (s1) s1.textContent = sessionScore + '%';
+  const mn = document.getElementById('complete-mod-name');
+  if (mn) mn.textContent = t(activeModule.titleKey);
+  navigateTo('screen-complete');
+}
+
+function makeCertId() {
+  const n = moduleNum(activeModule);
+  const y = new Date().getFullYear();
+  let seq = 1;
+  try {
+    if (currentUser && currentUser.role === 'worker') seq = SLStore.listResults(currentUser.workerId).length + 1;
+  } catch (e) {}
+  return 'SLAR-M' + n + '-' + y + '-' + String(seq).padStart(3, '0');
+}
+
+function certShareText() {
+  const p = CertificateModule.currentPayload || {};
+  const mod = p.module && TRAINING_MODULES[p.module] ? t(TRAINING_MODULES[p.module].titleKey) : (p.module || '');
+  return `SafetyLens AR — ${t('cert_heading')}: ${p.worker || ''}, ${mod}, ${p.score || ''}%, ${p.timestamp || ''} (${p.sig || ''})`;
+}
+function shareCertificate() {
+  const text = certShareText();
+  if (navigator.share) { navigator.share({ title: 'SafetyLens AR', text: text }).catch(() => {}); return; }
+  try {
+    const done = () => {
+      const b = document.getElementById('btn-cert-share');
+      if (b) { const o = b.textContent; b.textContent = '✓'; setTimeout(() => { b.textContent = o; }, 1200); }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
+    else done();
+  } catch (e) {}
+}
+function downloadCertificate() {
+  try {
+    const p = CertificateModule.currentPayload || {};
+    const blob = new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'safetylens-certificate.json';
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(a.href); a.remove(); } catch (e) {} }, 500);
+  } catch (e) {}
 }
 
 function startARModule(moduleObj) {
@@ -285,14 +413,133 @@ function startARModule(moduleObj) {
 function setConsequence(obj) {
   const titleElem = document.getElementById('consequence-label');
   if (titleElem) titleElem.textContent = obj.title[currentLang] || obj.title['en'];
+  const fullText = obj.explanation[currentLang] || obj.explanation['en'];
+  const sub = document.getElementById('consequence-sub');
+  if (sub) {
+    const cut = fullText.indexOf('.');
+    sub.textContent = (cut > 20 ? fullText.slice(0, cut + 1) : fullText);
+  }
   const textElem = document.getElementById('consequence-text');
-  if (textElem) textElem.textContent = obj.explanation[currentLang] || obj.explanation['en'];
+  if (textElem) textElem.textContent = fullText;
+  const hint = document.getElementById('consequence-hint');
+  if (hint) {
+    const hm = STEP_HINTS[activeModule.id + '.' + moduleStepIndex] || {};
+    hint.textContent = hm[currentLang] || hm['en'] || '';
+  }
+  const wrap = document.getElementById('consequence-expl-wrap');
+  if (wrap) wrap.style.display = 'none';
+  const sh = document.getElementById('btn-show-expl');
+  if (sh) { const lbl = sh.querySelector('[data-i18n="show_expl"],[data-i18n="hide_expl"]'); if (lbl) lbl.setAttribute('data-i18n', 'show_expl'); }
+  updateDOMTranslations();
+}
+
+// ── Worker home / certificates tab / profile ────────────────────────────────────
+
+function renderWorkerHome() {
+  const name = (currentUser && currentUser.name) || 'Ramesh Kumar';
+  const first = (name.trim().split(/\s+/)[0]) || 'Ramesh';
+  const hn = document.getElementById('home-hello-name'); if (hn) hn.textContent = first;
+  const av = document.getElementById('home-avatar-initial'); if (av) av.textContent = (first[0] || 'R').toUpperCase();
+  let done = 0, total = 0;
+  try {
+    total = Object.keys(TRAINING_MODULES).length;
+    if (currentUser && currentUser.role === 'worker') {
+      done = new Set(SLStore.listResults(currentUser.workerId).map(r => r.moduleId)).size;
+    }
+  } catch (e) {}
+  const pt = document.getElementById('home-progress-text');
+  if (pt) pt.textContent = done + ' / ' + total + ' ' + t('completed');
+  const arc = document.getElementById('home-progress-arc');
+  if (arc) { const C = 163.3; arc.setAttribute('stroke-dashoffset', String(C * (1 - (total ? done / total : 0)))); }
+}
+
+function renderCertsList() {
+  const list = document.getElementById('certs-list');
+  const empty = document.getElementById('certs-empty');
+  if (!list) return;
+  let recs = [];
+  try {
+    if (currentUser && currentUser.role === 'worker') {
+      recs = SLStore.listResults(currentUser.workerId).slice().sort((a, b) => (b.ts || '').localeCompare(a.ts || ''));
+    }
+  } catch (e) {}
+  if (empty) empty.style.display = recs.length ? 'none' : 'block';
+  list.innerHTML = recs.map((r, i) => {
+    const mod = TRAINING_MODULES[r.module];
+    const modName = mod ? t(mod.titleKey) : r.module;
+    return `<button class="cert-row-card" data-cert-idx="${i}"><span class="cert-row-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.2 8.4-8 11-4.8-2.6-8-6-8-11V5z" stroke="#3ECF8E" stroke-width="1.8" fill="rgba(62,207,142,0.12)"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8" stroke="#3ECF8E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cert-row-meta"><span class="cert-row-mod">${modName}</span><span class="cert-row-sub">${r.score}% · ${r.ts || ''}</span></span></button>`;
+  }).join('');
+  list.querySelectorAll('.cert-row-card').forEach(btn => btn.addEventListener('click', function () {
+    const rec = recs[Number(this.getAttribute('data-cert-idx'))];
+    if (rec) { viewingSaved = rec; navigateTo('screen-certificate'); }
+  }));
+}
+
+function renderProfile() {
+  const name = (currentUser && currentUser.name) || 'Ramesh Kumar';
+  const first = (name.trim().split(/\s+/)[0]) || 'R';
+  const pn = document.getElementById('profile-name'); if (pn) pn.textContent = name;
+  const pa = document.getElementById('profile-avatar-initial'); if (pa) pa.textContent = first[0].toUpperCase();
+  const pc = document.getElementById('profile-clan'); if (pc) pc.textContent = clanNameOf(currentUser);
+}
+function clanNameOf(user) {
+  try {
+    if (!user || !user.clanId) return '';
+    const clans = SLStore.listClans();
+    const c = clans.find(x => x.id === user.clanId);
+    return c ? c.name : user.clanId;
+  } catch (e) { return ''; }
+}
+function setActiveTab(tab) {
+  document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === tab));
+}
+
+// ── AR chrome: compass, flashlight, recenter, close ──────────────────────────────
+
+function startCompass() {
+  stopCompass();
+  if (typeof DeviceOrientationEvent === 'undefined') return;
+  const needle = document.getElementById('ar-compass-needle');
+  if (!needle) return;
+  compassHandler = function (e) {
+    const raw = (e.webkitCompassHeading != null) ? e.webkitCompassHeading : (e.alpha || 0);
+    if (typeof raw !== 'number' || !isFinite(raw)) return;
+    needle.style.transform = `rotate(${(-raw).toFixed(1)}deg)`;
+  };
+  window.addEventListener('deviceorientation', compassHandler, true);
+}
+function stopCompass() {
+  if (compassHandler) { window.removeEventListener('deviceorientation', compassHandler, true); compassHandler = null; }
+}
+function videoTrack() {
+  try {
+    const v = document.getElementById('ar-camera-video');
+    const s = v && v.srcObject;
+    const tracks = s ? s.getVideoTracks() : [];
+    return tracks.length ? tracks[0] : null;
+  } catch (e) { return null; }
+}
+function setTorch(on) {
+  torchOn = !!on;
+  const b = document.getElementById('btn-ar-torch');
+  if (b) b.classList.toggle('on', torchOn);
+}
+async function toggleTorch() {
+  try {
+    const track = videoTrack();
+    const caps = track && track.getCapabilities ? track.getCapabilities() : {};
+    if (!track || !caps.torch) { const b = document.getElementById('btn-ar-torch'); if (b) b.style.display = 'none'; return; }
+    await track.applyConstraints({ advanced: [{ torch: !torchOn }] });
+    setTorch(!torchOn);
+  } catch (e) { const b = document.getElementById('btn-ar-torch'); if (b) b.style.display = 'none'; }
 }
 
 // ── Briefing ───────────────────────────────────────────────────────────────────
 
 function showBriefing() {
   const overlay = document.getElementById('briefing-overlay');
+  const sb = document.getElementById('briefing-step');
+  if (sb) sb.textContent = `STEP ${moduleStepIndex + 1}/${activeModule.steps.length}`;
   const body = document.getElementById('briefing-text');
   if (body) body.textContent = (activeModule.briefing && (activeModule.briefing[currentLang] || activeModule.briefing['en'])) || '';
   const title = document.getElementById('briefing-title');
@@ -401,13 +648,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  document.querySelectorAll('.role-btn').forEach(btn => btn.addEventListener('click', function () {
-    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    const isAdmin = this.getAttribute('data-role') === 'admin';
-    document.getElementById('worker-login-form').style.display = isAdmin ? 'none' : 'block';
-    document.getElementById('admin-login-form').style.display = isAdmin ? 'block' : 'none';
+  document.querySelectorAll('[data-go-role]').forEach(btn => btn.addEventListener('click', function () {
+    pendingRole = this.getAttribute('data-go-role') === 'admin' ? 'admin' : 'worker';
+    if (langChosen()) { navigateTo('screen-login'); }
+    else { navigateTo('screen-language'); }
   }));
+  document.querySelectorAll('[data-pick-lang]').forEach(btn => btn.addEventListener('click', function () {
+    chooseLanguage(this.getAttribute('data-pick-lang'));
+    navigateTo('screen-login');
+  }));
+  document.querySelectorAll('[data-tab]').forEach(btn => btn.addEventListener('click', function () {
+    const tab = this.getAttribute('data-tab');
+    if (tab === 'certs') navigateTo('screen-certs');
+    else if (tab === 'profile') navigateTo('screen-profile');
+    else navigateTo('screen-mod-select');
+  }));
+  document.getElementById('btn-role-back')?.addEventListener('click', () => navigateTo('screen-role'));
+  document.getElementById('btn-logout-2')?.addEventListener('click', () => { SLStore.logout(); currentUser = null; applySessionUI(null); navigateTo('screen-login'); });
 
   populateClanSelect();
   document.getElementById('btn-worker-login')?.addEventListener('click', () => doLogin(true, false));
@@ -416,7 +673,48 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('quick-worker')?.addEventListener('click', async () => { const r = await SLStore.loginWorker('Ramesh Kumar','clan-mine3'); if (r && r.ok) routeHome(); });
   document.getElementById('btn-logout')?.addEventListener('click', () => { SLStore.logout(); currentUser = null; applySessionUI(null); navigateTo('screen-login'); });
 
-  document.getElementById('btn-intro-continue')?.addEventListener('click', () => routeHome());
+  document.getElementById('btn-intro-continue')?.addEventListener('click', () => {
+    if (SLStore.currentUser()) routeHome();
+    else navigateTo('screen-role');
+  });
+
+  // Splash: auto-advance + tap to skip
+  setTimeout(() => { if (currentScreen === 'screen-splash') navigateTo('screen-intro'); }, 2400);
+  document.getElementById('screen-splash')?.addEventListener('click', () => { if (currentScreen === 'screen-splash') navigateTo('screen-intro'); });
+
+  // AR chrome controls
+  document.getElementById('btn-ar-close')?.addEventListener('click', () => goBack());
+  document.getElementById('btn-ar-recenter')?.addEventListener('click', () => { if (typeof ChainEngine.recenter === 'function') ChainEngine.recenter(); });
+  document.getElementById('btn-ar-torch')?.addEventListener('click', () => toggleTorch());
+
+  // Found / correct / complete flow
+  document.getElementById('btn-found-next')?.addEventListener('click', () => { if (foundStep) revealQuestion(foundStep); });
+  document.getElementById('btn-correct-next')?.addEventListener('click', () => advanceStep());
+  document.getElementById('btn-complete-cert')?.addEventListener('click', () => navigateTo('screen-certificate'));
+  document.getElementById('btn-complete-next')?.addEventListener('click', () => navigateTo('screen-mod-select'));
+
+  // Question helpers
+  document.getElementById('btn-listen-question')?.addEventListener('click', () => { if (currentQuestionText) TTSEngine.speak(currentQuestionText); });
+  document.getElementById('btn-submit-answer')?.addEventListener('click', () => {
+    if (!selectedChoiceId) {
+      const h = document.getElementById('ar-hint-text');
+      if (h) { h.textContent = t('choose_first'); h.style.display = 'block'; }
+      TTSEngine.speak(t('choose_first'));
+      return;
+    }
+    handleChoiceSelection(selectedChoiceId);
+  });
+  document.getElementById('btn-show-expl')?.addEventListener('click', function () {
+    const wrap = document.getElementById('consequence-expl-wrap');
+    const open = wrap && wrap.style.display !== 'none';
+    if (wrap) wrap.style.display = open ? 'none' : 'block';
+    const lbl = this.querySelector('[data-i18n]');
+    if (lbl) { lbl.setAttribute('data-i18n', open ? 'show_expl' : 'hide_expl'); lbl.textContent = t(open ? 'show_expl' : 'hide_expl'); }
+  });
+
+  // Certificate share / download
+  document.getElementById('btn-cert-share')?.addEventListener('click', shareCertificate);
+  document.getElementById('btn-cert-download')?.addEventListener('click', downloadCertificate);
 
   function startModule(m) {
     activeModule = m; moduleStepIndex = 0; wrongTurnsInSession = []; sessionScore = 96; sessionResponseTimes = [];
@@ -451,7 +749,8 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('nav-dashboard-link')?.addEventListener('click', () => { if (currentUser && currentUser.role === 'admin') navigateTo('screen-dashboard'); });
   document.getElementById('nav-back-to-mods')?.addEventListener('click', () => goBack());
 
-  setLanguage('en');
+  setLanguage(getStoredLang() || 'en');
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === currentLang));
   TTSEngine.speak(t('stat_num') + " " + t('stat_caption'));
   applySessionUI(SLStore.currentUser());
 });

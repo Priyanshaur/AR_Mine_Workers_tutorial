@@ -18,9 +18,9 @@ const CertificateModule = {
     this.updateCertificate(defaultName, containerId, userScore, moduleKey, userPath);
   },
 
-  updateCertificate: function(name, containerId, scoreVal, moduleKey, pathStr) {
-    const workerName = name.trim() || "Ramesh Kumar";
-    const dateStr = new Date().toISOString().split('T')[0];
+  updateCertificate: function(name, containerId, scoreVal, moduleKey, pathStr, tsOverride) {
+    const workerName = (name || '').trim() || "Ramesh Kumar";
+    const dateStr = tsOverride || new Date().toISOString().split('T')[0];
     const score = scoreVal || 96;
     const modId = moduleKey || "mod1";
     const pathText = pathStr || "Correct on first attempt";

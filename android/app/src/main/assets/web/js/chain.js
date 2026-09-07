@@ -76,6 +76,12 @@ const ChainEngine = {
     this._raf = requestAnimationFrame(() => this._render(true));
   },
 
+  recenter: function () {
+    this._initialBearing = null;
+    this._orientationLive = false;
+    if (this.nodes) this._smooth = this.nodes.map(() => 50);
+  },
+
   stop: function () {
     this._active = false;
     this._firedFocus = false;

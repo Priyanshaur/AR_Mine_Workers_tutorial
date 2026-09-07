@@ -31,6 +31,71 @@
       </div>
     </div>
 
+    <!-- Screen: Splash -->
+    <div id="screen-splash" class="app-screen splash-screen active">
+      <div class="splash-photo" aria-hidden="true">
+        <svg class="splash-miner" viewBox="0 0 200 300" fill="none">
+          <ellipse cx="100" cy="290" rx="90" ry="14" fill="rgba(0,0,0,0.45)"/>
+          <path d="M100 78 c-26 0 -40 22 -42 52 l-6 90 c-1 14 8 24 22 24 h52 c14 0 23 -10 22 -24 l-6 -90 c-2 -30 -16 -52 -42 -52z" fill="#1a1e22"/>
+          <path d="M78 150 l-22 60 M122 150 l22 60" stroke="#1a1e22" stroke-width="20" stroke-linecap="round"/>
+          <rect x="82" y="150" width="36" height="52" rx="4" fill="#FFB020"/>
+          <rect x="82" y="168" width="36" height="8" fill="#1a1400" opacity="0.55"/>
+          <circle cx="100" cy="58" r="24" fill="#2a2e33"/>
+          <path d="M72 52 a28 28 0 0 1 56 0 l-4 6 h-48 z" fill="#FFB020"/>
+          <rect x="94" y="30" width="12" height="10" rx="2" fill="#FFF7D6"/>
+          <path d="M100 40 L138 96" stroke="#FFF7D6" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+          <circle cx="142" cy="102" r="10" fill="#FFF7D6" opacity="0.35"/>
+        </svg>
+        <div class="splash-glow"></div>
+      </div>
+      <div class="splash-body">
+        <div class="splash-logo-mark" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><path d="M22 3l15 8v10c0 9-6.4 15.4-15 20C13.4 36.4 7 30 7 21V11z" stroke="#F4F2EC" stroke-width="2.5" fill="rgba(255,176,32,0.15)"/><path d="M12 26l6-9 4 6 4-8 6 11" stroke="#FFB020" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="splash-title">SafetyLens <span>AR</span></div>
+        <div class="splash-tag" data-i18n="splash_tag">Real Training. Real Skills. Safer Tomorrows.</div>
+      </div>
+      <div class="splash-foot" data-i18n="splash_foot">Built for the people who keep India moving.</div>
+      <div class="splash-load"><div class="splash-load-fill"></div></div>
+    </div>
+
+    <!-- Screen: Role Selection -->
+    <div id="screen-role" class="app-screen role-screen">
+      <div class="role-head">
+        <div class="role-title" data-i18n="role_title">Let's get you started</div>
+        <div class="role-sub" data-i18n="role_sub">Choose your role to continue</div>
+      </div>
+      <button class="role-card worker" data-go-role="worker">
+        <span class="role-photo worker-photo" aria-hidden="true">
+          <svg viewBox="0 0 120 90" fill="none"><circle cx="60" cy="34" r="16" fill="#2a2e33"/><path d="M42 30a20 20 0 0 1 36 0l-3 5H45z" fill="#FFB020"/><path d="M30 88c2-20 14-30 30-30s28 10 30 30" fill="#1a1e22"/><rect x="46" y="62" width="28" height="16" rx="2" fill="#FFB020"/></svg>
+        </span>
+        <span class="role-text"><span class="role-name" data-i18n="role_worker">I am a Worker</span>
+        <span class="role-points" data-i18n="role_worker_sub">Take training · Learn by doing · Earn certificates</span></span>
+        <span class="role-arrow" aria-hidden="true">→</span>
+      </button>
+      <button class="role-card admin" data-go-role="admin">
+        <span class="role-photo admin-photo" aria-hidden="true">
+          <svg viewBox="0 0 120 90" fill="none"><circle cx="60" cy="30" r="14" fill="#2a2e33"/><path d="M34 86c2-18 12-26 26-26s24 8 26 26" fill="#1a3a34"/><rect x="70" y="52" width="26" height="18" rx="2" fill="#4FE3C1" opacity="0.8"/><rect x="74" y="56" width="18" height="3" fill="#0F1214"/><rect x="74" y="61" width="12" height="3" fill="#0F1214"/></svg>
+        </span>
+        <span class="role-text"><span class="role-name" data-i18n="role_admin">I am an Admin / Supervisor</span>
+        <span class="role-points" data-i18n="role_admin_sub">Manage workers · Track progress · View reports</span></span>
+        <span class="role-arrow" aria-hidden="true">→</span>
+      </button>
+      <div class="role-quote" data-i18n="role_quote">Safer Workers. Stronger Mines. Brighter Communities.</div>
+    </div>
+
+    <!-- Screen: Language Selection -->
+    <div id="screen-language" class="app-screen lang-screen">
+      <div class="lang-head">
+        <div class="lang-title" data-i18n="lang_title">Choose Your Language</div>
+        <div class="lang-sub" data-i18n="lang_sub">Select the language you are most comfortable with.</div>
+      </div>
+      <button class="lang-card" data-pick-lang="en"><span class="lang-badge">EN</span><span class="lang-text"><span class="lang-name">English</span><span class="lang-desc" data-i18n="lang_en_desc">Training in English</span></span></button>
+      <button class="lang-card" data-pick-lang="hi"><span class="lang-badge">अ</span><span class="lang-text"><span class="lang-name">हिन्दी</span><span class="lang-desc" data-i18n="lang_hi_desc">हिन्दी में प्रशिक्षण</span></span></button>
+      <button class="lang-card" data-pick-lang="sat"><span class="lang-badge">ᱚ</span><span class="lang-text"><span class="lang-name">ᱥᱟᱱᱛᱟᱲᱤ</span><span class="lang-desc" data-i18n="lang_sat_desc">ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ ᱪᱮᱫᱚᱜ</span></span></button>
+      <div class="lang-tag" data-i18n="lang_tag">Training Today. A Safer Tomorrow.</div>
+    </div>
+
     <!-- Screen 0: Login / Role selection -->
     <div id="screen-login" class="app-screen">
       <div class="hazard-strip"></div>
@@ -38,10 +103,7 @@
         <div class="login-brand">SAFETYLENS <span>AR</span></div>
         <div class="login-sub">Mining &amp; Industrial AR Safety System</div>
 
-        <div class="role-toggle">
-          <button class="role-btn active" data-role="worker">Worker</button>
-          <button class="role-btn" data-role="admin">Admin</button>
-        </div>
+        <div class="login-role-note"><button id="btn-role-back" class="link-btn" data-i18n="change_role">← Change role</button></div>
 
         <div id="worker-login-form">
           <label class="field-label">WORKER NAME</label>
@@ -79,15 +141,17 @@
     <!-- Scenario briefing overlay (shown before a module starts) -->
     <div id="briefing-overlay" class="briefing-overlay">
       <div class="briefing-panel">
-        <div class="briefing-tag" data-i18n="briefing_label">SCENARIO BRIEFING</div>
+        <div class="briefing-top"><span class="briefing-tag" data-i18n="briefing_label">SCENARIO BRIEFING</span><span id="briefing-step" class="briefing-step">STEP 1/3</span></div>
+        <div class="briefing-doc" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14H6z" stroke="#4FE3C1" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12h7M9 15.5h7" stroke="#4FE3C1" stroke-width="1.6" stroke-linecap="round"/></svg></div>
         <div id="briefing-title" class="briefing-title"></div>
         <div id="briefing-text" class="briefing-text"></div>
-        <button id="btn-briefing-begin" class="action-btn" style="width:100%;" data-i18n="begin_btn">Begin Training</button>
+        <div class="briefing-tip"><span aria-hidden="true">💡</span><span data-i18n="briefing_tip">Stay calm. Look around and find the correct object.</span></div>
+        <button id="btn-briefing-begin" class="action-btn" style="width:100%;" data-i18n="begin_scan_btn">Start Scanning →</button>
       </div>
     </div>
 
     <!-- Screen 1: Intro Stat -->
-    <div id="screen-intro" class="app-screen active">
+    <div id="screen-intro" class="app-screen">
       <div class="intro-hero">
         <div class="intro-scanline"></div>
         <div class="intro-ring"></div>
@@ -102,6 +166,15 @@
     <!-- Screen: Module Selection -->
     <div id="screen-mod-select" class="app-screen">
       <div class="hazard-strip"></div>
+      <div class="home-greet">
+        <span class="home-avatar" id="home-avatar-initial" aria-hidden="true">R</span>
+        <span class="home-greet-text"><span class="home-hello"><span data-i18n="home_hello">Hello,</span> <span id="home-hello-name">Ramesh</span>!</span>
+        <span class="home-sub" data-i18n="home_sub">Keep learning. Stay safe.</span></span>
+      </div>
+      <div class="home-progress">
+        <span class="home-progress-text"><span data-i18n="home_progress">Your Progress</span><span id="home-progress-text" class="mono">0 / 5 modules</span></span>
+        <svg class="home-ring" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="#2A3034" stroke-width="7"/><circle id="home-progress-arc" cx="32" cy="32" r="26" fill="none" stroke="#FFB020" stroke-width="7" stroke-linecap="round" stroke-dasharray="163.3" stroke-dashoffset="163.3" transform="rotate(-90 32 32)"/></svg>
+      </div>
       <div class="mod-select-header">
         <h2 class="oswald" style="font-size:22px; margin-bottom:4px;" data-i18n="select_module">Select Training Module</h2>
         <p style="font-size:12px; color:#868D93;" data-i18n="subtitle">Mining & Industrial AR Safety System</p>
@@ -164,6 +237,11 @@
       <div style="margin: 16px 24px;">
         <button id="nav-dashboard-link" class="action-btn" style="width:100%; background:#202528; color:#F4F2EC; border:1px solid #2A3034;" data-i18n="dash_title">Readiness Dashboard</button>
       </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="home"><span class="tab-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-i18n="tab_home">Home</span></button>
+        <button class="tab-btn" data-tab="certs"><span class="tab-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="11" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 19h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-i18n="tab_certs">Certificates</span></button>
+        <button class="tab-btn" data-tab="profile"><span class="tab-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.5-3.5 4-5 7-5s5.5 1.5 7 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-i18n="tab_profile">Profile</span></button>
+      </div>
     </div>
 
     <!-- Screen 2: AR HUD Decision Scene -->
@@ -174,9 +252,17 @@
         <span class="guide-step" data-phase="answer"><b>③</b><span data-i18n="guide_answer">Choose an ANSWER</span></span>
       </div>
       <div id="step-sequence" class="step-sequence" aria-label="Module progress"></div>
+      <div class="ar-topbar">
+        <div class="ar-topbar-text"><span id="ar-topbar-title" data-i18n="find_title">Find the correct object</span><span id="ar-topbar-step" class="ar-topbar-step">STEP 1/3</span></div>
+        <button id="btn-ar-close" class="ar-x" aria-label="Close">✕</button>
+      </div>
       <div class="ar-stage">
         <video id="ar-camera-video" class="ar-video" autoplay playsinline muted></video>
         <canvas id="ar-hud-canvas" class="ar-canvas"></canvas>
+        <div id="ar-compass" class="ar-compass" aria-hidden="true"><span class="ar-compass-n">N</span><span id="ar-compass-needle" class="ar-compass-needle"></span></div>
+        <div class="ar-tip"><span aria-hidden="true">💡</span><span data-i18n="scan_tip">Move around slowly. The object will be highlighted when you are close.</span></div>
+        <button id="btn-ar-recenter" class="ar-corner-btn left" aria-label="Recenter">◎</button>
+        <button id="btn-ar-torch" class="ar-corner-btn right" aria-label="Flashlight">🔦</button>
 
         <!-- Multi-object search chain: candidate objects placed in the AR scene -->
         <div id="ar-object-grid" class="ar-object-grid"></div>
@@ -268,6 +354,10 @@
         <div id="choices-buttons">
           <!-- Dynamic choice buttons inserted via app.js -->
         </div>
+        <div class="qa-footer">
+          <button id="btn-listen-question" class="listen-btn"><span aria-hidden="true">🔊</span><span data-i18n="listen_q">Listen to question</span></button>
+          <button id="btn-submit-answer" class="action-btn submit-btn" data-i18n="submit_btn" disabled>Submit →</button>
+        </div>
       </div>
     </div>
 
@@ -284,47 +374,129 @@
       <div class="consequence-panel">
         <div>
           <div class="consequence-head">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3l9 16H3z" fill="rgba(255,82,51,0.14)" stroke="#FF5233" stroke-width="1.6"/><path d="M12 9v5M12 16.5v0.5" stroke="#FF5233" stroke-width="1.8" stroke-linecap="round"/></svg>
-            <div id="consequence-label" class="consequence-label" data-i18n="consequence_title">IGNITION</div>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,82,51,0.14)" stroke="#FF5233" stroke-width="1.8"/><path d="M9 9l6 6M15 9l-6 6" stroke="#FF5233" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <div id="consequence-label" class="consequence-label" data-i18n="not_safest">Not the safest choice!</div>
           </div>
-          <div id="consequence-text" class="consequence-text">Electrical torch switch sparked near gas concentration.</div>
+          <div id="consequence-sub" class="consequence-text">Electrical torch switch sparked near gas concentration.</div>
+          <div class="hint-card"><span aria-hidden="true">💡</span><span><b data-i18n="hint_label">Hint</b> — <span id="consequence-hint"></span></span></div>
+          <div id="consequence-expl-wrap" class="expl-wrap" style="display:none;">
+            <div id="consequence-text" class="consequence-text">Electrical torch switch sparked near gas concentration.</div>
+          </div>
         </div>
-        <button id="btn-retry-consequence" class="action-btn" data-i18n="retry_btn">Return to decision point</button>
+        <div class="consequence-btns">
+          <button id="btn-retry-consequence" class="action-btn" style="width:100%;" data-i18n="try_again">Try Again</button>
+          <button id="btn-show-expl" class="ghost-btn" style="width:100%;"><span aria-hidden="true">ⓘ</span> <span data-i18n="show_expl">Show Explanation</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen: Object Found -->
+    <div id="screen-found" class="app-screen found-screen">
+      <div class="found-glow" aria-hidden="true"></div>
+      <svg class="found-badge" width="84" height="84" viewBox="0 0 84 84" fill="none"><circle cx="42" cy="42" r="38" fill="rgba(62,207,142,0.15)" stroke="#3ECF8E" stroke-width="4"/><path d="M27 43l8 8 22-24" stroke="#3ECF8E" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="found-title" data-i18n="found_title">Object Found!</div>
+      <div class="found-card">
+        <div id="found-obj-icon" class="found-obj-icon" aria-hidden="true"></div>
+        <span id="found-obj-pill" class="found-pill">Gas cylinder</span>
+      </div>
+      <div class="found-sub" data-i18n="found_sub">Now decide what to do.</div>
+      <button id="btn-found-next" class="action-btn" style="width:100%;" data-i18n="next_btn">Next →</button>
+    </div>
+
+    <!-- Screen: Correct Answer -->
+    <div id="screen-correct" class="app-screen correct-screen">
+      <div class="correct-glow" aria-hidden="true"></div>
+      <svg class="found-badge" width="84" height="84" viewBox="0 0 84 84" fill="none"><circle cx="42" cy="42" r="38" fill="rgba(62,207,142,0.15)" stroke="#3ECF8E" stroke-width="4"/><path d="M27 43l8 8 22-24" stroke="#3ECF8E" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="found-title" data-i18n="correct_title">Correct!</div>
+      <div id="correct-sub" class="found-sub">Using the correct equipment helps control the gas leak.</div>
+      <div class="confirm-banner"><span aria-hidden="true">✓</span><span data-i18n="correct_banner">Well done! You are making safer decisions.</span></div>
+      <button id="btn-correct-next" class="action-btn" style="width:100%;" data-i18n="next_step_btn">Next Step →</button>
+    </div>
+
+    <!-- Screen: Module Completed -->
+    <div id="screen-complete" class="app-screen complete-screen">
+      <div class="complete-rays" aria-hidden="true"></div>
+      <svg class="complete-medal" width="96" height="96" viewBox="0 0 96 96" fill="none"><circle cx="48" cy="48" r="40" fill="rgba(255,176,32,0.15)" stroke="#FFB020" stroke-width="4"/><path d="M48 30l5.5 11 12 1.8-8.7 8.5 2 12-10.8-5.7-10.8 5.7 2-12-8.7-8.5 12-1.8z" fill="#FFB020"/></svg>
+      <div class="found-title" data-i18n="complete_title">Module Completed!</div>
+      <div id="complete-mod-name" class="found-sub">Gas Leak &amp; Confined Space</div>
+      <div class="stat-chips">
+        <span class="stat-chip"><span aria-hidden="true">⏱</span><span data-i18n="stat_time">Time</span> — <b id="complete-time" class="mono">0:00</b></span>
+        <span class="stat-chip"><span aria-hidden="true">🎯</span><span data-i18n="stat_attempts">Attempts</span> — <b id="complete-attempts" class="mono">1</b></span>
+        <span class="stat-chip"><span aria-hidden="true">★</span><span data-i18n="stat_score">Score</span> — <b id="complete-score" class="mono">100%</b></span>
+      </div>
+      <button id="btn-complete-cert" class="action-btn" style="width:100%;" data-i18n="view_cert">View Certificate</button>
+      <button id="btn-complete-next" class="ghost-btn" style="width:100%; margin-top:10px;" data-i18n="next_module">Next Module</button>
+      <div class="complete-tag" data-i18n="complete_tag">Small actions make a big difference.</div>
+    </div>
+
+    <!-- Screen: My Certificates -->
+    <div id="screen-certs" class="app-screen">
+      <div class="hazard-strip"></div>
+      <div class="page-head"><div class="page-title" data-i18n="certs_title">My Certificates</div></div>
+      <div id="certs-list" class="certs-list"></div>
+      <div id="certs-empty" class="certs-empty" data-i18n="certs_empty">No certificates yet — finish a module to earn one.</div>
+      <div class="tab-bar">
+        <button class="tab-btn" data-tab="home"><span class="tab-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-i18n="tab_home">Home</span></button>
+        <button class="tab-btn active" data-tab="certs"><span class="tab-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="11" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 19h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-i18n="tab_certs">Certificates</span></button>
+        <button class="tab-btn" data-tab="profile"><span class="tab-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.5-3.5 4-5 7-5s5.5 1.5 7 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-i18n="tab_profile">Profile</span></button>
+      </div>
+    </div>
+
+    <!-- Screen: Profile -->
+    <div id="screen-profile" class="app-screen">
+      <div class="hazard-strip"></div>
+      <div class="page-head"><div class="page-title" data-i18n="profile_title">Profile</div></div>
+      <div class="profile-card">
+        <span class="home-avatar big" id="profile-avatar-initial" aria-hidden="true">R</span>
+        <div class="profile-name" id="profile-name">Ramesh Kumar</div>
+        <div class="profile-clan" id="profile-clan">Mine Site 3</div>
+      </div>
+      <div class="profile-section">
+        <div class="field-label" data-i18n="profile_lang">Language</div>
+        <div class="profile-lang-row">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="hi">HI</button>
+          <button class="lang-btn" data-lang="sat">SAT</button>
+        </div>
+      </div>
+      <button id="btn-logout-2" class="ghost-btn" style="width:100%;" data-i18n="logout">Logout</button>
+      <div class="tab-bar">
+        <button class="tab-btn" data-tab="home"><span class="tab-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span data-i18n="tab_home">Home</span></button>
+        <button class="tab-btn" data-tab="certs"><span class="tab-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="11" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 19h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-i18n="tab_certs">Certificates</span></button>
+        <button class="tab-btn active" data-tab="profile"><span class="tab-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.5-3.5 4-5 7-5s5.5 1.5 7 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span data-i18n="tab_profile">Profile</span></button>
       </div>
     </div>
 
     <!-- Screen 4: Verified Certificate -->
     <div id="screen-certificate" class="app-screen">
       <div class="hazard-strip"></div>
-      <div class="cert-body">
-        <svg class="check-icon" width="48" height="48" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" fill="none" stroke="#3ECF8E" stroke-width="4"/><path d="M17 29 L24 36 L39 20" fill="none" stroke="#3ECF8E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <div class="cert-head">
-          <svg class="cert-shield" width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.2 8.4-8 11-4.8-2.6-8-6-8-11V5z" fill="rgba(62,207,142,0.12)" stroke="#3ECF8E" stroke-width="1.6"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8" stroke="#3ECF8E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div class="cert-tag" data-i18n="cert_title">Protocol followed correctly</div>
-        </div>
-        <div class="cert-sub" data-i18n="cert_sub">Generate a signed completion certificate for this worker.</div>
-
-        <span class="field-label" data-i18n="worker_name_label">WORKER NAME</span>
-        <input id="worker-name-input" type="text" class="cert-input" value="Ramesh Kumar" placeholder="Enter worker full name" data-i18n="worker_name_placeholder">
-
-        <div class="cert-frame">
-        <div class="cert-card">
-          <div class="stamp-verified" data-i18n="cert_verified">VERIFIED</div>
-          <div class="cert-row"><span class="cert-k" data-i18n="cert_worker">Worker</span><span class="cert-worker-name-val">Ramesh Kumar</span></div>
-          <div class="cert-row"><span class="cert-k" data-i18n="cert_module">Module</span><span>Gas Leak & Confined Space</span></div>
-          <div class="cert-row"><span class="cert-k" data-i18n="cert_date">Date</span><span id="cert-date-val">2026-09-02</span></div>
-          <div class="cert-row"><span class="cert-k" data-i18n="cert_path">Path</span><span id="cert-path-val" data-i18n="path_perfect">Correct on first attempt</span></div>
-          <div class="cert-row"><span class="cert-k" data-i18n="cert_score">Readiness score</span><span id="cert-score-val" class="mono" style="font-weight:600;">96</span></div>
-          <div class="cert-row"><span class="cert-k" data-i18n="cert_time">Response</span><span id="cert-time-val" class="mono">—</span></div>
-
-          <div class="cert-skills" id="cert-skills"></div>
-
-          <div id="cert-qr-holder" class="qr-container"></div>
+      <div class="cert-body parchment-wrap">
+        <div class="parchment">
+          <div class="parch-logo">
+            <svg width="34" height="34" viewBox="0 0 44 44" fill="none"><path d="M22 3l15 8v10c0 9-6.4 15.4-15 20C13.4 36.4 7 30 7 21V11z" stroke="#8a6d2f" stroke-width="2.5" fill="rgba(255,176,32,0.15)"/><path d="M12 26l6-9 4 6 4-8 6 11" stroke="#8a6d2f" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="parch-word">SafetyLens AR</span>
+          </div>
+          <div class="parch-head" data-i18n="cert_heading">Certificate of Completion</div>
+          <div class="parch-body"><span data-i18n="cert_body1">This certifies that</span></div>
+          <div class="parch-name cert-worker-name-val">Ramesh Kumar</div>
+          <div class="parch-body"><span data-i18n="cert_body2">has successfully completed</span></div>
+          <div class="parch-mod" id="cert-module-val">Module 1 — Gas Leak &amp; Confined Space</div>
+          <div class="parch-meta">
+            <span><span data-i18n="cert_date">Date</span>: <span id="cert-date-val">2026-09-02</span></span>
+            <span><span data-i18n="cert_id">Certificate ID</span>: <span id="cert-id-val" class="mono">SLAR-M1-2026-001</span></span>
+          </div>
+          <div class="parch-foot">
+            <svg class="parch-seal" width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="26" r="18" fill="#FFB020"/><circle cx="32" cy="26" r="13" fill="none" stroke="#8a6d2f" stroke-width="2"/><path d="M25 26l5 5 10-11" stroke="#8a6d2f" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 42l-4 12 8-3 6 5 6-5 8 3-4-12" fill="#FFB020" stroke="#8a6d2f" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            <span class="parch-qr"><span id="cert-qr-holder" class="qr-container"></span><span class="parch-qr-cap" data-i18n="cert_scan">Scan to Verify (Offline)</span></span>
+          </div>
           <div id="cert-sig-val" class="sig-text">signed payload &middot; {"worker":"Ramesh Kumar","score":96} &middot; sig:8f2a91c0e4b7...</div>
         </div>
+        <input id="worker-name-input" type="text" style="display:none;" value="Ramesh Kumar">
+        <div class="cert-actions">
+          <button id="btn-cert-share" class="action-btn dark-half" data-i18n="share_btn">Share</button>
+          <button id="btn-cert-download" class="action-btn dark-half" data-i18n="download_btn">Download</button>
         </div>
-
-        <div style="margin-top: 18px;">
+        <div style="margin-top: 12px;">
           <button id="btn-open-verifier" class="action-btn" style="width:100%;" data-i18n="scan_qr_btn">Open QR Scanner & Verifier</button>
         </div>
       </div>

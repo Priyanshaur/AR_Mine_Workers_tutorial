@@ -47,13 +47,15 @@ The gap is not *knowledge* — it is *behavior under pressure*. A rule read in a
 
 A persistent **1‑2‑3 guide strip** (find → tap → answer, spoken aloud) and a numbered **step‑sequence strip** (done / current / upcoming) keep every worker oriented; large high‑contrast AR objects make each candidate easy to identify.
 
+The worker journey runs **Splash → Role select → Language select → Login → Home** (with Home / Certificates / Profile tabs), so a first-time worker is never dropped into training cold.
+
 Each step is a **multi‑object search chain**:
 1. A **scenario briefing** introduces the situation.
 2. A prompt + an **identification clue** tell you what to look for.
 3. **4 candidate objects** are placed in the AR scene (randomized positions each run). Pan/look to bring the correct one under the **focus reticle**; a live **scout readout** names the nearest object and its direction.
-4. On finding it, a **usage cue** confirms the object ("✔ Gas cylinder — now decide what to do") and a question appears.
-5. Answer correctly → advance; wrong object/answer → a **consequence explanation** and you retry the same step. **Adaptive hints** appear after a miss.
-6. Finishing the module → the **certificate**.
+4. Tapping the right object opens an **"Object Found"** confirmation, then the question appears — pick an option and press **Submit** (with a **Listen** button that reads the question aloud).
+5. Correct → a **success screen** → next step; wrong object/answer → a **consequence screen** with an **adaptive hint** plus an expandable **Show Explanation**, then retry. **Adaptive hints** appear after a miss.
+6. Finishing the module → a **completion screen** (time / attempts / score) → the **certificate** (parchment card with seal, QR, Share/Download). Earned certificates live under the **Certificates** tab and can be re-opened anytime.
 
 ### AR engine
 - Camera passthrough + orientation‑guided pan‑to‑find (no ARCore / SLAM — reliable on mid‑range Android).
