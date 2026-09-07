@@ -161,7 +161,9 @@ const ChainEngine = {
       if (live) {
         targetX = Math.max(2, Math.min(98, 50 + (d / this.VIEW_HALF) * 48));
       } else {
-        targetX = this._slotFor(i, this.nodes.length);
+        // touch-drag pans background + objects together (shared SLPano state)
+        var dragP = (window.SLPano && typeof window.SLPano.dragDeg === 'number') ? (window.SLPano.dragDeg / 360) * 100 : 0;
+        targetX = ((this._slotFor(i, this.nodes.length) - dragP) % 100 + 100) % 100;
       }
       // smooth so objects glide instead of snapping
       this._smooth[i] += (targetX - this._smooth[i]) * (first ? 1 : 0.22);

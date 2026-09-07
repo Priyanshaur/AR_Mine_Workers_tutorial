@@ -58,7 +58,8 @@ Each step is a **multi‑object search chain**:
 6. Finishing the module → a **completion screen** (time / attempts / score) → the **certificate** (parchment card with seal, QR, Share/Download). Earned certificates live under the **Certificates** tab and can be re-opened anytime.
 
 ### AR engine
-- Camera passthrough + orientation‑guided pan‑to‑find (no ARCore / SLAM — reliable on mid‑range Android).
+- Per‑module **3D‑feel mine panorama** (tileable parallax tunnel: far/mid/near layers panning at different speeds) instead of the live camera feed — identical on every device, no camera permission needed.
+- Each module renders its **actual conditions**: gas haze + wisps (gas leak), smoke + embers + hard flicker (fire), dust (machinery), arc strobes + rain (electrical), dusty roadway (transport); orientation‑guided pan‑to‑find throughout (no ARCore / SLAM — reliable on mid‑range Android).
 - Pseudo‑3D tilting hazard objects (CSS `perspective` + `rotateX/rotateY` from pitch/roll).
 - **Animated objects** (idle float, focus highlight, found pulse), **focus reticle**, **scout readout**, and a **static fallback layout** for non‑orientation devices (no answer giveaway).
 - **Spatial distance**: some objects are "far" and require the **walk‑closer** gate (motion‑based, with a graceful fallback so the demo never stalls).

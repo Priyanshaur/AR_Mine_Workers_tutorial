@@ -70,7 +70,7 @@ function navigateTo(screenId, isBackNavigation = false) {
   if (target) { target.classList.add('active'); currentScreen = screenId; }
 
   hideBriefing();
-  if (screenId !== 'screen-ar-scene') { ARHUDEngine.stop(); ChainEngine.stop(); hideApproach(); stopCompass(); setTorch(false); }
+  if (screenId !== 'screen-ar-scene') { ARHUDEngine.stop(); ChainEngine.stop(); Panorama.destroy(); hideApproach(); stopCompass(); setTorch(false); }
   if (screenId !== 'screen-consequence') ParticleEngine.stop();
   if (screenId !== 'screen-qr-verifier') QRVerifier.stopScanner();
 
@@ -203,9 +203,8 @@ function renderStepUI() {
   const step = activeModule.steps[moduleStepIndex];
   if (!step) { navigateTo('screen-certificate'); return; }
 
-  // live camera passthrough
-  ARHUDEngine.video = document.getElementById('ar-camera-video');
-  ARHUDEngine.startCamera();
+  // mine panorama background (replaces the live camera feed)
+  Panorama.init(activeModule.id);
 
   setAlarmCaption(activeModule);
 

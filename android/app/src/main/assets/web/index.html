@@ -258,6 +258,12 @@
       </div>
       <div class="ar-stage">
         <video id="ar-camera-video" class="ar-video" autoplay playsinline muted></video>
+        <div id="pano-far" class="pano-layer"></div>
+        <div id="pano-mid" class="pano-layer"></div>
+        <div id="pano-near" class="pano-layer"></div>
+        <canvas id="pano-particles" class="pano-particles"></canvas>
+        <div id="pano-fog" class="pano-fog"></div>
+        <div id="pano-flicker" class="pano-flicker"></div>
         <canvas id="ar-hud-canvas" class="ar-canvas"></canvas>
         <div id="ar-compass" class="ar-compass" aria-hidden="true"><span class="ar-compass-n">N</span><span id="ar-compass-needle" class="ar-compass-needle"></span></div>
         <div class="ar-tip"><span aria-hidden="true">💡</span><span data-i18n="scan_tip">Move around slowly. The object will be highlighted when you are close.</span></div>
@@ -595,8 +601,9 @@
   <script src="js/ar_hud.js"></script>
   <script src="js/particles.js"></script>
   <script src="js/certificate.js"></script>
-  <script src="js/dashboard.js"></script>
-  <script src="js/chain.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/panorama.js"></script>
+<script src="js/chain.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
