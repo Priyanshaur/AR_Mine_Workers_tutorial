@@ -40,6 +40,10 @@ const ChainEngine = {
   _callbacks: null,
   _raf: null,
   _smooth: [],
+  // Half-angle of the camera view. Objects anchored outside this cone are out
+  // of frame (hidden) until the worker physically turns toward them — like
+  // real objects sitting at fixed spots around a room, not a UI carousel.
+  VIEW_HALF: 38,
 
   start: function (containerId, nodeObjects, callbacks) {
     this.stop();
@@ -65,7 +69,7 @@ const ChainEngine = {
     if (cont) {
       cont.innerHTML = nodeObjects.map((o, i) =>
         `<button class="chain-obj" data-index="${i}" data-correct="${o.correct ? '1' : '0'}" data-key="${o.key}" style="left:50%;top:50%;">
-           <div class="chain-obj-inner">${CHAIN_SPRITES[o.key] || ''}<div class="chain-obj-name">${(o.name && (o.name[currentLang] || o.name.en)) || o.key}</div></div>
+           <div class="chain-obj-inner">${CHAIN_SPRITES[o.key] || ''}<div class="chain-obj-name">${this._labelFor(o)}</div></div>
          </button>`).join('');
       cont.querySelectorAll('.chain-obj').forEach(btn => {
         btn.addEventListener('click', () => this._select(btn));
@@ -118,6 +122,20 @@ const ChainEngine = {
     return ((i + 0.5) / n) * 100;
   },
 
+  // Stable pseudo-distance per object (1.5–4.6 m) for the floating "name — X m"
+  // label, so each hazard reads as sitting at a fixed spot in the room.
+  _distFor: function (key) {
+    let h = 0;
+    const s = String(key || '');
+    for (let i = 0; i < s.length; i++) { h = ((h * 31) + s.charCodeAt(i)) >>> 0; }
+    return (1.5 + (h % 32) / 10).toFixed(1);
+  },
+
+  _labelFor: function (o) {
+    const name = (o.name && (o.name[currentLang] || o.name.en)) || o.key;
+    return name + ' — ' + this._distFor(o.key) + ' m';
+  },
+
   _render: function (first) {
     if (!this._active) return;
     this._raf = requestAnimationFrame(() => this._render());
@@ -128,27 +146,34 @@ const ChainEngine = {
     const btns = this.el.querySelectorAll('.chain-obj');
 
     this.nodes.forEach((o, i) => {
+      const d = live ? this._deltaFor(o.offset || 0) : 0;
+      const abs = Math.abs(d);
+      if (abs < bestAbs) { bestAbs = abs; best = i; }
+      const b = btns[i];
+      if (!b) return;
+      // Out of frame until the worker turns toward the object's fixed bearing.
+      if (live && abs > this.VIEW_HALF) {
+        if (b.style.display !== 'none') b.style.display = 'none';
+        b.classList.remove('focused');
+        return;
+      }
       let targetX;
       if (live) {
-        const d = this._deltaFor(o.offset || 0);
-        targetX = Math.max(7, Math.min(93, 50 + (d / 60) * 46));
-        if (Math.abs(d) < bestAbs) { bestAbs = Math.abs(d); best = i; }
+        targetX = Math.max(2, Math.min(98, 50 + (d / this.VIEW_HALF) * 48));
       } else {
         targetX = this._slotFor(i, this.nodes.length);
       }
       // smooth so objects glide instead of snapping
       this._smooth[i] += (targetX - this._smooth[i]) * (first ? 1 : 0.22);
       const s = this._smooth[i];
-      const b = btns[i];
-      if (b) {
-        const near = live && Math.abs(this._deltaFor(o.offset || 0)) <= 12;
-        b.style.left = s + '%';
-        const y = (o.far ? 55 : 50);
-        b.style.top = y + '%';
-        b.style.transform = 'translate(-50%,-50%) scale(' + (live ? (near ? 1.3 : Math.max(0.8, 1.0 - Math.abs(this._deltaFor(o.offset||0)) / 240)) : 1) + ')';
-        b.style.zIndex = near ? 5 : 1;
-        b.classList.toggle('focused', live ? near : false);
-      }
+      const near = live && abs <= 12;
+      if (b.style.display === 'none') b.style.display = '';
+      b.style.left = s + '%';
+      const y = (o.far ? 55 : 50);
+      b.style.top = y + '%';
+      b.style.transform = 'translate(-50%,-50%) scale(' + (live ? (near ? 1.3 : Math.max(0.8, 1.0 - abs / 240)) : 1) + ')';
+      b.style.zIndex = near ? 5 : 1;
+      b.classList.toggle('focused', live ? near : false);
     });
     this.focusIndex = best;
 

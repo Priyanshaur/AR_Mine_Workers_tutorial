@@ -52,7 +52,7 @@ The worker journey runs **Splash → Role select → Language select → Login �
 Each step is a **multi‑object search chain**:
 1. A **scenario briefing** introduces the situation.
 2. A prompt + an **identification clue** tell you what to look for.
-3. **4 candidate objects** are placed in the AR scene (randomized positions each run). Pan/look to bring the correct one under the **focus reticle**; a live **scout readout** names the nearest object and its direction.
+3. **4 candidate objects** sit at **fixed bearings around the room** (randomized each run) — only whatever the camera points at is in frame, the rest stay out of frame until you turn. Each in-view object carries a floating **name — distance label**; pan/look to bring the correct one under the **focus reticle**; a live **scout readout** names the nearest object and its direction.
 4. Tapping the right object opens an **"Object Found"** confirmation, then the question appears — pick an option and press **Submit** (with a **Listen** button that reads the question aloud).
 5. Correct → a **success screen** → next step; wrong object/answer → a **consequence screen** with an **adaptive hint** plus an expandable **Show Explanation**, then retry. **Adaptive hints** appear after a miss.
 6. Finishing the module → a **completion screen** (time / attempts / score) → the **certificate** (parchment card with seal, QR, Share/Download). Earned certificates live under the **Certificates** tab and can be re-opened anytime.

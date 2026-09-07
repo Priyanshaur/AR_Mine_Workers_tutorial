@@ -263,10 +263,18 @@ body {
 .mod-card.locked:active { transform: none; border-color: var(--border); box-shadow: none; }
 
 .mod-card-icon {
-  float: right; width: 44px; height: 44px; margin: 2px 2px 6px 12px;
+  float: left; width: 58px; height: 58px; margin: 2px 14px 6px 2px;
   display: flex; align-items: center; justify-content: center;
-  border-radius: 8px; background: rgba(79,227,193,0.08); border: 1px solid rgba(79,227,193,0.25);
+  border-radius: 50%; background: rgba(79,227,193,0.08); border: 1px solid rgba(79,227,193,0.25);
+  flex-shrink: 0;
 }
+.mod-card-icon svg { width: 34px; height: 34px; }
+#card-mod0 .mod-card-icon { background: rgba(62,207,142,0.16); border-color: rgba(62,207,142,0.5); }
+#card-mod1 .mod-card-icon { background: rgba(79,163,227,0.16); border-color: rgba(79,163,227,0.5); }
+#card-mod2 .mod-card-icon { background: rgba(255,140,50,0.16); border-color: rgba(255,140,50,0.5); }
+#card-mod3 .mod-card-icon { background: rgba(134,141,147,0.16); border-color: rgba(134,141,147,0.5); }
+#card-mod4 .mod-card-icon { background: rgba(180,140,227,0.16); border-color: rgba(180,140,227,0.5); }
+#card-mod5 .mod-card-icon { background: rgba(79,227,193,0.16); border-color: rgba(79,227,193,0.5); }
 .mod-card.locked .mod-card-icon { background: rgba(134,141,147,0.08); border-color: rgba(134,141,147,0.2); }
 .mod-card-tag {
   display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600;
@@ -276,6 +284,10 @@ body {
 .mod-card.locked .mod-card-tag { color: var(--muted); background: rgba(134,141,147,0.1); border-color: rgba(134,141,147,0.25); }
 .mod-title { font-family: 'Oswald', sans-serif; font-size: 18px; color: var(--amber); margin-bottom: 6px; letter-spacing: 0.01em; }
 .mod-desc { font-size: 13px; color: var(--muted); line-height: 1.4; }
+/* Large, glanceable module rows: tall rows, big badges, bold high-contrast names */
+#screen-mod-select .mod-card { min-height: 98px; padding: 20px 52px 20px 18px; margin: 0 16px 16px; border-bottom: 2px solid rgba(244,242,236,0.07); }
+#screen-mod-select .mod-title { font-size: 21px; font-weight: 700; color: #FFFFFF; margin-bottom: 7px; line-height: 1.25; }
+#screen-mod-select .mod-desc { font-size: 13px; }
 
 /* ── Screen 2: AR HUD View ───────────────────────────────────────────── */
 .ar-stage {
