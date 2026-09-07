@@ -58,7 +58,9 @@ Each step is a **multi‑object search chain**:
 6. Finishing the module → a **completion screen** (time / attempts / score) → the **certificate** (parchment card with seal, QR, Share/Download). Earned certificates live under the **Certificates** tab and can be re-opened anytime.
 
 ### AR engine
-- Per‑module **3D‑feel mine panorama** (tileable parallax tunnel: far/mid/near layers panning at different speeds) instead of the live camera feed — identical on every device, no camera permission needed.
+- Per‑module **3D‑feel mine panorama** (tileable parallax tunnel: far/mid/near layers panning at depth‑scaled speeds) instead of the live camera feed — identical on every device, no camera permission needed.
+- **True first‑person projection** (`chain.js`): every hazard is a fixed **bearing / distance / height** point projected through a pinhole-camera model using the phone's **yaw and pitch** (≈70° HFOV, ≈52° VFOV), so objects swing past the reticle at fixed spots in the room rather than sliding along a strip. Off‑frustum objects are clipped/faded, apparent size falls off with distance and grows as they near the reticle.
+- Background **panorama** is locked to the **same focal length** as the objects (`window.SL_FOV` shared), with the near wall scrolling fastest and the far tunnel slowest for real parallax; pitch pans the layers vertically.
 - Each module renders its **actual conditions**: gas haze + wisps (gas leak), smoke + embers + hard flicker (fire), dust (machinery), arc strobes + rain (electrical), dusty roadway (transport); orientation‑guided pan‑to‑find throughout (no ARCore / SLAM — reliable on mid‑range Android).
 - Pseudo‑3D tilting hazard objects (CSS `perspective` + `rotateX/rotateY` from pitch/roll).
 - **Animated objects** (idle float, focus highlight, found pulse), **focus reticle**, **scout readout**, and a **static fallback layout** for non‑orientation devices (no answer giveaway).

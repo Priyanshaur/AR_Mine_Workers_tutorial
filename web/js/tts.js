@@ -37,6 +37,7 @@ const TTSEngine = {
     if (!this.enabled) {
       this.stop();
     }
+    try { if (typeof Sfx !== 'undefined') Sfx.setEnabled(this.enabled); } catch (e) {}
     if (btnElem) {
       btnElem.textContent = this.enabled ? '🔊' : '🔇';
       btnElem.setAttribute('title', this.enabled ? 'Mute Audio' : 'Unmute Audio');

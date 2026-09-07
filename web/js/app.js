@@ -70,7 +70,14 @@ function navigateTo(screenId, isBackNavigation = false) {
   if (target) { target.classList.add('active'); currentScreen = screenId; }
 
   hideBriefing();
-  if (screenId !== 'screen-ar-scene') { ARHUDEngine.stop(); ChainEngine.stop(); Panorama.destroy(); hideApproach(); stopCompass(); setTorch(false); }
+  if (screenId !== 'screen-ar-scene') {
+    ARHUDEngine.stop(); ChainEngine.stop(); Panorama.destroy(); hideApproach(); stopCompass(); setTorch(false);
+    // Preserve scenario state across the consequence screen so retry resumes;
+    // a full stop happens on certificate/dashboard/login navigation via stop().
+    if (screenId !== 'screen-consequence' && typeof Scenario !== 'undefined' && Scenario.active) Scenario.stop();
+    try { Sfx.stopAll(); } catch (e) {}
+    try { if (!((typeof Scenario !== 'undefined') && Scenario.active)) document.body.classList.remove('scenario-mode'); } catch (e) {}
+  }
   if (screenId !== 'screen-consequence') ParticleEngine.stop();
   if (screenId !== 'screen-qr-verifier') QRVerifier.stopScanner();
 
@@ -152,7 +159,7 @@ function goBack() {
     // to the certificate again (no steps remain), making Back look broken.
     // Also skip forward-only interstitials (correct/complete) so Back from a
     // fresh certificate lands on the module list, not mid-flow screens.
-    const skipTarget = (t) => t === 'screen-correct' || t === 'screen-complete'
+    const skipTarget = (t) => t === 'screen-correct' || t === 'screen-complete' || t === 'screen-debrief'
       || (t === 'screen-ar-scene' && (!activeModule.steps || moduleStepIndex >= activeModule.steps.length));
     while (skipTarget(target) && navigationHistory.length > 1) {
       navigationHistory.pop();
@@ -201,6 +208,14 @@ function renderStepUI() {
   // First entry into a module → present the scenario briefing first.
   if (moduleStepIndex === 0 && briefedModuleId !== activeModule.id) {
     showBriefing();
+    return;
+  }
+
+  // First-person scenario mode (currently the Gas module): explore →
+  // discover → inspect → decide. Legacy step flow below is untouched.
+  if (typeof SCENARIOS !== 'undefined' && SCENARIOS[activeModule.id]) {
+    if (typeof Scenario !== 'undefined' && Scenario.active) Scenario.resume();
+    else if (typeof Scenario !== 'undefined') Scenario.start(activeModule.id);
     return;
   }
 
@@ -742,6 +757,10 @@ document.addEventListener('DOMContentLoaded', function () {
     hideBriefing();
     renderStepUI();
   });
+
+  // Scenario inspect close + debrief continue
+  document.getElementById('btn-inspect-close')?.addEventListener('click', () => { if (typeof Scenario !== 'undefined') Scenario.closeInspect(); });
+  document.getElementById('btn-debrief-continue')?.addEventListener('click', () => showCompleteScreen());
 
   // Consequence retry
   document.getElementById('btn-retry-consequence')?.addEventListener('click', () => navigateTo('screen-ar-scene'));

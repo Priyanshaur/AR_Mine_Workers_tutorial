@@ -25,8 +25,14 @@ const CHAIN_SPRITES = {
   gloves:      '<svg viewBox="0 0 120 90"><g stroke="#0F1214" stroke-width="2" fill="#4FE3C1"><path d="M28 30 h12 v30 a8 8 0 0 1 -12 0 z"/><path d="M44 26 h10 v52 a10 10 0 0 1 -10 10 z"/><path d="M60 26 h10 v30 a10 10 0 0 1 -20 0 v-24 z"/><path d="M74 32 h10 v20 a10 10 0 0 1 -20 0 z"/></g></svg>',
   vest:        '<svg viewBox="0 0 120 90"><g stroke="#0F1214" stroke-width="2"><path d="M40 14 h40 l4 20 8 34 -18 14 -8 -24 -8 24 -18 -14 8 -34 z" fill="#FFB020"/><path d="M48 24 h24" stroke="#1a1400" stroke-width="4"/></g></svg>',
   guard:       '<svg viewBox="0 0 120 90"><g stroke="#0F1214" stroke-width="2"><rect x="20" y="16" width="80" height="58" rx="6" fill="#868D93"/><path d="M20 38 h80 M20 52 h80" stroke="#0F1214" stroke-width="3"/><path d="M40 16 v58 M60 16 v58 M80 16 v58" stroke="#0F1214" stroke-width="3"/></g></svg>',
-  sign:        '<svg viewBox="0 0 120 90"><g stroke="#0F1214" stroke-width="2"><path d="M60 10 l40 70 h-80 z" fill="#FFB020"/><path d="M60 34 v16 M60 60 v0.4" stroke="#1a1400" stroke-width="5"/></g></svg>'
+  sign:        '<svg viewBox="0 0 120 90"><g stroke="#0F1214" stroke-width="2"><path d="M60 10 l40 70 h-80 z" fill="#FFB020"/><path d="M60 34 v16 M60 60 v0.4" stroke="#1a1400" stroke-width="5"/></g></svg>',
+  fan:         '<svg viewBox="0 0 120 90"><g stroke="#0F1214" stroke-width="2"><circle cx="60" cy="44" r="26" fill="#1a2027"/><path d="M60 44 m0 -18 a18 18 0 0 1 15 9 l-15 9 z" fill="#868D93"/><path d="M60 44 m15 9 a18 18 0 0 1 -7 16 l-8 -16 z" fill="#868D93"/><path d="M60 44 m-8 16 a18 18 0 0 1 -8 -16 l16 -8 z" fill="#868D93"/><circle cx="60" cy="44" r="5" fill="#FFB020"/><path d="M42 70 h36 M48 70 v14 M72 70 v14" stroke="#0F1214" stroke-width="3" fill="none"/></g></svg>',
+  phone:       '<svg viewBox="0 0 120 90"><g stroke="#0F1214" stroke-width="2"><rect x="38" y="14" width="44" height="58" rx="6" fill="#FF5233"/><rect x="46" y="24" width="28" height="10" rx="2" fill="#F4F2EC"/><circle cx="60" cy="52" r="9" fill="none" stroke="#F4F2EC" stroke-width="4"/><path d="M60 78 v8 M52 86 h16" stroke="#0F1214" stroke-width="3"/></g></svg>',
+  crate:       '<svg viewBox="0 0 120 90"><g stroke="#0F1214" stroke-width="2"><rect x="26" y="28" width="68" height="44" rx="3" fill="#4d3d28"/><path d="M26 42 h68 M26 58 h68 M48 28 v44 M72 28 v44" stroke="#241b12" stroke-width="4"/></g></svg>',
+  worker:      '<svg viewBox="0 0 120 90"><g stroke="#0F1214" stroke-width="2"><circle cx="60" cy="30" r="12" fill="#c9a06a"/><path d="M44 28 a16 16 0 0 1 32 0 l-3 4 h-26 z" fill="#FFB020"/><path d="M38 84 c2 -16 10 -24 22 -24 s20 8 22 24 z" fill="#4FE3C1"/></g></svg>'
 };
+
+const DEG = Math.PI / 180;
 
 const ChainEngine = {
   el: null,
@@ -35,30 +41,55 @@ const ChainEngine = {
   _handler: null,
   _currentBearing: 0,
   _initialBearing: null,
+  _currentPitch: 0,
+  _initialPitchBeta: null,
   _orientationLive: false,
   _active: false,
   _callbacks: null,
   _raf: null,
   _smooth: [],
+  _smoothY: [],
+  _smoothS: [],
+  // First-person pinhole projection. Half-angles of the viewport frustum in
+  // degrees; objects outside it are clipped/faded instead of laid on a strip.
+  HFOV: 70,
+  VFOV: 52,
 
-  start: function (containerId, nodeObjects, callbacks) {
+  start: function (containerId, nodeObjects, callbacks, opts) {
     this.stop();
     this.nodes = nodeObjects;
     this._callbacks = callbacks || {};
     this._currentBearing = 0;
     this._initialBearing = null;
+    this._currentPitch = 0;
+    this._initialPitchBeta = null;
     this._orientationLive = false;
     this._active = true;
     this._firedFocus = false;
+    this._lookKey = null;
+    opts = opts || {};
 
-    // Randomise object placement each run so the correct one isn't in a fixed spot.
-    const offsets = nodeObjects.map(o => o.offset || 0);
-    for (let i = offsets.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const tmp = offsets[i]; offsets[i] = offsets[j]; offsets[j] = tmp;
+    // Randomise object placement each run so the correct one isn't in a fixed
+    // spot — unless the caller needs fixed scenario bearings (opts.fixed).
+    if (!opts.fixed) {
+      const offsets = nodeObjects.map(o => o.offset || 0);
+      for (let i = offsets.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = offsets[i]; offsets[i] = offsets[j]; offsets[j] = tmp;
+      }
+      nodeObjects.forEach((o, i) => { o.offset = offsets[i]; });
     }
-    nodeObjects.forEach((o, i) => { o.offset = offsets[i]; });
-    this._smooth = nodeObjects.map(o => this._orientationLive ? 50 : this._slotFor(0, nodeObjects.length));
+    // Give every candidate a stable 3D placement (bearing, distance, height) so
+    // the projection has something real to work with. `el` (elevation, deg) and
+    // `far` already exist; fill any not-yet-authored values deterministically so
+    // the label distance and the projected size agree.
+    nodeObjects.forEach((o, i) => {
+      if (o.el == null || !isFinite(o.el)) o.el = this._elevForKey(o.key, i);
+      if (o.dist == null || !isFinite(o.dist)) o.dist = parseFloat(this._distFor(o.key)) + (o.far ? 2.2 : 0);
+    });
+    this._smooth = nodeObjects.map(() => 50);
+    this._smoothY = nodeObjects.map(() => 50);
+    this._smoothS = nodeObjects.map(() => 1);
 
     const cont = document.getElementById(containerId);
     this.el = cont;
@@ -78,8 +109,10 @@ const ChainEngine = {
 
   recenter: function () {
     this._initialBearing = null;
+    this._initialPitchBeta = null;
+    this._currentPitch = 0;
     this._orientationLive = false;
-    if (this.nodes) this._smooth = this.nodes.map(() => 50);
+    if (this.nodes) { this._smooth = this.nodes.map(() => 50); this._smoothY = this.nodes.map(() => 50); this._smoothS = this.nodes.map(() => 1); }
   },
 
   stop: function () {
@@ -97,6 +130,14 @@ const ChainEngine = {
       if (typeof raw !== 'number' || !isFinite(raw)) return;
       self._currentBearing = raw;
       if (self._initialBearing === null) { self._initialBearing = raw; self._smooth = self.nodes.map(() => 50); }
+      // Pitch (look up/down): tilting the top of an upright phone away drops
+      // beta below its initial value, i.e. positive pitch = looking up.
+      // Clamped to ±30° to avoid motion sickness and edge chasing.
+      const beta = (typeof e.beta === 'number' && isFinite(e.beta)) ? e.beta : null;
+      if (beta !== null) {
+        if (self._initialPitchBeta === null) self._initialPitchBeta = beta;
+        self._currentPitch = Math.max(-30, Math.min(30, self._initialPitchBeta - beta));
+      }
       self._orientationLive = true;
     };
     if (typeof DeviceOrientationEvent !== 'undefined') {
@@ -114,6 +155,24 @@ const ChainEngine = {
     return d;
   },
 
+  // Relative pitch (deg, + = looking up) minus object elevation.
+  _pitchDeltaFor: function (o) {
+    return this._currentPitch - ((o && o.el) || 0);
+  },
+
+  // 2D angular distance (deg) between view centre and object. Focus/pick use
+  // this; yaw-only callers (scout arrow, legacy steps) keep working.
+  _angDist: function (o) {
+    const dy = this._deltaFor(o.offset || 0);
+    const dp = this._pitchDeltaFor(o);
+    return Math.sqrt(dy * dy + dp * dp);
+  },
+
+  // Current first-person view for panorama/scenario consumers.
+  getView: function () {
+    return { yaw: this._currentBearing, pitch: this._currentPitch, live: this._orientationLive };
+  },
+
   _slotFor: function (i, n) {
     return ((i + 0.5) / n) * 100;
   },
@@ -129,7 +188,49 @@ const ChainEngine = {
 
   _labelFor: function (o) {
     const name = (o.name && (o.name[currentLang] || o.name.en)) || o.key;
-    return name + ' — ' + this._distFor(o.key) + ' m';
+    const d = (o.dist != null && isFinite(o.dist)) ? o.dist.toFixed(1) : this._distFor(o.key);
+    return name + ' — ' + d + ' m';
+  },
+
+  // Deterministic default elevation (deg, + = up) per key so objects that never
+  // authored an `el` still scatter across vertical space instead of one line.
+  _elevForKey: function (key, i) {
+    let h = 0;
+    const s = String(key || '');
+    for (let k = 0; k < s.length; k++) h = ((h * 31) + s.charCodeAt(k)) >>> 0;
+    return Math.round((h % 21) - 10);
+  },
+
+  // Simplified first-person pinhole projection. Given an object's fixed bearing
+  // (offset), distance (dist) and elevation (el) plus the current view
+  // yaw/pitch, returns viewport coords (%), a scale factor, an edge fade (1 in
+  // frame → 0 at the frustum edge) and whether it's visibly in the frustum.
+  _project: function (o) {
+    const tanHF = Math.tan(this.HFOV / 2 * DEG);
+    const tanVF = Math.tan(this.VFOV / 2 * DEG);
+    const d = this._deltaFor(o.offset || 0);             // signed yaw offset (deg, + right)
+    // Vertical offset of the object above the view axis (deg, + = object higher).
+    const dup = ((o && o.el) || 0) - this._currentPitch;
+    // Clamp to ±90° so tan() never flips sign / blows up for objects behind
+    // the viewer; those are reported as out-of-frame and hidden.
+    const yaw = Math.max(-90, Math.min(90, d));
+    const up = Math.max(-90, Math.min(90, dup));
+    const nx = Math.tan(yaw * DEG) / tanHF;
+    const ny = Math.tan(up * DEG) / tanVF;
+    const x = 50 + nx * 50;                              // + right → screen right
+    const y = 50 - ny * 50;                              // object above → screen up
+    const dist = o.dist || 2.5;
+    // Apparent size falls off with distance and grows smoothly as the object
+    // nears the reticle, instead of a two-step near/far toggle.
+    const centered = Math.sqrt(nx * nx + ny * ny);
+    const closeness = Math.max(0, 1 - centered / 1.4);
+    let scale = (2.4 / dist) * (0.72 + closeness * 0.5);
+    scale = Math.max(0.62, Math.min(1.35, scale));
+    // Fade as the object approaches the frustum edge; hide once past it/behind.
+    const edge = Math.max(Math.abs(nx), Math.abs(ny));
+    const fade = Math.max(0, Math.min(1, (1.15 - edge) / 0.25));
+    const inView = edge <= 1.0 && Math.abs(d) <= 90 && Math.abs(dup) <= 90;
+    return { x: x, y: y, scale: scale, fade: fade, inView: inView };
   },
 
   _render: function (first) {
@@ -139,38 +240,62 @@ const ChainEngine = {
 
     const live = this._orientationLive;
     let best = 0, bestAbs = Infinity;
+    let viewBest = -1, viewBestAbs = Infinity;
     const btns = this.el.querySelectorAll('.chain-obj');
 
+    // Touch-drag pitch shared with the panorama (fallback mode only).
+    const dragPdeg = (window.SLPano && typeof window.SLPano.dragPitch === 'number') ? window.SLPano.dragPitch : 0;
     this.nodes.forEach((o, i) => {
-      const d = live ? this._deltaFor(o.offset || 0) : 0;
-      const abs = Math.abs(d);
-      if (abs < bestAbs) { bestAbs = abs; best = i; }
+      const dist = live ? this._angDist(o) : 0;
+      if (dist < bestAbs) { bestAbs = dist; best = i; }
       const b = btns[i];
       if (!b) return;
-      let targetX;
+      let targetX, targetY, scale, fade = 1;
+      const baseY = (o.far ? 55 : 50);
       if (live) {
-        // Full-circle room strip: every object keeps its fixed room position
-        // and glides continuously as you turn — nothing pops in or vanishes.
-        // ±180° maps to -100%..200%; the viewport clips whatever is behind you.
-        targetX = 50 + (d / 180) * 150;
+        // First-person projection: a fixed bearing/distance/height point that
+        // swings past as the camera rotates, not a strip item sliding left/right.
+        const p = this._project(o);
+        targetX = p.x;
+        targetY = p.y;
+        scale = p.scale;
+        fade = p.inView ? p.fade : 0;
+        if (p.inView && dist < viewBestAbs) { viewBestAbs = dist; viewBest = i; }
+        if (!p.inView) { b.style.display = 'none'; return; }
+        if (b.style.display === 'none') b.style.display = '';
       } else {
         // touch-drag pans background + objects together (shared SLPano state)
         var dragP = (window.SLPano && typeof window.SLPano.dragDeg === 'number') ? (window.SLPano.dragDeg / 360) * 100 : 0;
         targetX = ((this._slotFor(i, this.nodes.length) - dragP) % 100 + 100) % 100;
+        targetY = Math.max(8, Math.min(92, baseY + dragPdeg * 0.9));
+        scale = 1;
+        if (b.style.display === 'none') b.style.display = '';
       }
       // smooth so objects glide instead of snapping
       this._smooth[i] += (targetX - this._smooth[i]) * (first ? 1 : 0.22);
+      this._smoothY[i] += (targetY - this._smoothY[i]) * (first ? 1 : 0.22);
+      this._smoothS[i] += (scale - this._smoothS[i]) * (first ? 1 : 0.22);
       const s = this._smooth[i];
-      const near = live && abs <= 12;
-      if (b.style.display === 'none') b.style.display = '';
+      const sy = this._smoothY[i];
+      const ss = this._smoothS[i];
+      const near = live && dist <= 12;
       b.style.left = s + '%';
-      const y = (o.far ? 55 : 50);
-      b.style.top = y + '%';
-      b.style.transform = 'translate(-50%,-50%) scale(' + (live ? (near ? 1.3 : Math.max(0.8, 1.0 - abs / 240)) : 1) + ')';
+      b.style.top = sy + '%';
+      b.style.transform = 'translate(-50%,-50%) scale(' + ss + ')';
+      b.style.opacity = live ? fade : '';
       b.style.zIndex = near ? 5 : 1;
       b.classList.toggle('focused', live ? near : false);
     });
-    this.focusIndex = best;
+    this.focusIndex = viewBest >= 0 ? viewBest : best;
+
+    // Look-targeting for scenario mode: notify once per centred-object change
+    // (live mode only; fallback keeps direct tap-to-inspect).
+    const lookObj = (live && viewBest >= 0) ? this.nodes[viewBest] : null;
+    const lookKey = lookObj ? ('i' + viewBest) : 'none';
+    if (lookKey !== this._lookKey) {
+      this._lookKey = lookKey;
+      if (this._callbacks && this._callbacks.onLook) this._callbacks.onLook(lookObj);
+    }
 
     // Nudge the worker to TAP once an object is first centred (guided onboarding)
     if (live && !this._firedFocus) {
@@ -206,8 +331,7 @@ const ChainEngine = {
     // Forgiving pick: in live mode you must have centred the object within 26°;
     // otherwise pan toward it. In static fallback any object can be tapped.
     if (this._orientationLive) {
-      const d = Math.abs(this._deltaFor(o.offset || 0));
-      if (d > 26) { if (this._callbacks.onWrongFocus) this._callbacks.onWrongFocus(o); return; }
+      if (this._angDist(o) > 26) { if (this._callbacks.onWrongFocus) this._callbacks.onWrongFocus(o); return; }
     }
     if (o.far) {
       btn.classList.add('approaching');

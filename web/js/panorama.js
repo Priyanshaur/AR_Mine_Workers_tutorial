@@ -12,13 +12,16 @@
 // devices without sensors (same condition as the chain fallback layout).
 
 window.SLPano = window.SLPano || { yaw: 0, live: false, dragDeg: 0 };
+// Shared field-of-view so the panorama and the hazard objects use the same
+// yaw→screen focal-length assumption (objects move with the near wall).
+window.SL_FOV = window.SL_FOV || { h: 70, v: 52 };
 
 const Panorama = {
   TILE_W: 720,
   TILE_H: 320,
-  // Near-identical pan speeds so the layers read as one continuous panoramic
-  // photo rather than a 3D game world; hazards glide with the room (~3.1).
-  PX: { far: 2.9, mid: 3.0, near: 3.1 }, // px shift per degree of yaw
+  // Depth-scaled parallax (near wall fastest, far slowest) derived from the
+  // objects' focal length so foreground hazards scroll with the near layer.
+  DEPTH: { far: 0.62, mid: 0.82, near: 1.0 },
   DRAG_K: 0.35, // degrees of pan per px of touch drag
 
   sceneId: null,
@@ -29,7 +32,11 @@ const Panorama = {
   _base: null,
   _live: false,
   _drag: 0,
+  _pitch: 0,
+  _pitchBase: null,
+  _dragPitch: 0,
   _touchX: null,
+  _touchY: null,
   _stage: null,
   _els: null,
   _pctx: null,
@@ -141,6 +148,7 @@ const Panorama = {
     this._seedParticles(scene.count || 0, !!scene.embers);
 
     this._yaw = 0; this._base = null; this._live = false; this._drag = 0;
+    this._pitch = 0; this._pitchBase = null; this._dragPitch = 0; this._touchY = null;
     this._syncShared();
     this._attachOrientation();
     this._attachTouch();
@@ -186,6 +194,11 @@ const Panorama = {
       if (typeof raw !== 'number' || !isFinite(raw)) return;
       if (self._base === null) self._base = raw;
       self._yaw = ((raw - self._base) % 360 + 360) % 360;
+      const beta = (typeof e.beta === 'number' && isFinite(e.beta)) ? e.beta : null;
+      if (beta !== null) {
+        if (self._pitchBase === null) self._pitchBase = beta;
+        self._pitch = Math.max(-30, Math.min(30, self._pitchBase - beta));
+      }
       self._live = true;
       self._syncShared();
     };
@@ -202,7 +215,7 @@ const Panorama = {
     this._stage = stage;
     this._ts = function (e) {
       const t = e.touches && e.touches[0];
-      if (t) self._touchX = t.clientX;
+      if (t) { self._touchX = t.clientX; self._touchY = t.clientY; }
     };
     this._tm = function (e) {
       const t = e.touches && e.touches[0];
@@ -211,18 +224,20 @@ const Panorama = {
       // drag pans the scene only when orientation is dead (mirrors chain fallback)
       if (!self._live) {
         self._drag = ((self._drag - (t.clientX - self._touchX) * self.DRAG_K) % 360 + 360) % 360;
+        self._dragPitch = Math.max(-30, Math.min(30, self._dragPitch + (t.clientY - (self._touchY == null ? t.clientY : self._touchY)) * 0.12));
         self._syncShared();
       }
       self._touchX = t.clientX;
+      self._touchY = t.clientY;
     };
-    this._te = function () { self._touchX = null; };
+    this._te = function () { self._touchX = null; self._touchY = null; };
     stage.addEventListener('touchstart', this._ts, { passive: true });
     stage.addEventListener('touchmove', this._tm, { passive: false });
     stage.addEventListener('touchend', this._te);
   },
 
   _syncShared: function () {
-    window.SLPano = { yaw: this._live ? this._yaw : this._drag, live: this._live, dragDeg: this._drag };
+    window.SLPano = { yaw: this._live ? this._yaw : this._drag, live: this._live, dragDeg: this._drag, pitch: this._pitch, dragPitch: this._dragPitch };
   },
 
   // ---- per-frame ----
@@ -231,12 +246,27 @@ const Panorama = {
     return ((x % this.TILE_W) + this.TILE_W) % this.TILE_W;
   },
 
+  // Same pinhole focal length as the hazard objects, so the background wall and
+  // the foreground objects use one yaw→screen transform.
+  _focalPxPerDeg: function () {
+    const hf = (window.SL_FOV && window.SL_FOV.h) || 70;
+    const w = (this._stage && this._stage.clientWidth) || 390;
+    return (w / 100) * (50 / Math.tan(hf / 2 * Math.PI / 180)) * (Math.PI / 180);
+  },
+
+  // Vertical: pitch ±30° maps across the 118%-tall layer (±40 points around
+  // centre), so the shift never exposes an edge. Positive pitch (looking up)
+  // lowers the percentage, sliding the world down on screen.
   update: function () {
     if (!this._els) return;
     const yaw = this._live ? this._yaw : this._drag;
-    if (this._els.far) this._els.far.style.backgroundPositionX = this._wrapPx(-(yaw * this.PX.far)) + 'px';
-    if (this._els.mid) this._els.mid.style.backgroundPositionX = this._wrapPx(-(yaw * this.PX.mid)) + 'px';
-    if (this._els.near) this._els.near.style.backgroundPositionX = this._wrapPx(-(yaw * this.PX.near)) + 'px';
+    const pitch = this._live ? this._pitch : this._dragPitch;
+    const py = (50 - Math.max(-30, Math.min(30, pitch)) * (40 / 30)).toFixed(1) + '%';
+    const focal = this._focalPxPerDeg();
+    const pxF = focal * this.DEPTH.far, pxM = focal * this.DEPTH.mid, pxN = focal * this.DEPTH.near;
+    if (this._els.far) { this._els.far.style.backgroundPositionX = this._wrapPx(-(yaw * pxF)) + 'px'; this._els.far.style.backgroundPositionY = py; }
+    if (this._els.mid) { this._els.mid.style.backgroundPositionX = this._wrapPx(-(yaw * pxM)) + 'px'; this._els.mid.style.backgroundPositionY = py; }
+    if (this._els.near) { this._els.near.style.backgroundPositionX = this._wrapPx(-(yaw * pxN)) + 'px'; this._els.near.style.backgroundPositionY = py; }
     this._syncShared();
     this._drawParticles();
   },

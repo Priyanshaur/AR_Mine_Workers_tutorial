@@ -296,7 +296,7 @@ body {
 .ar-video { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; opacity: 0.82; filter: saturate(1.05) contrast(1.02); }
 /* Mine panorama replaces the live camera feed (camera stays off) */
 #ar-camera-video { display: none; }
-.pano-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-repeat: repeat-x; background-size: 720px 100%; pointer-events: none; }
+.pano-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-repeat: repeat-x; background-size: 720px 118%; background-position-y: 0px; pointer-events: none; }
 #pano-far { z-index: 1; }
 #pano-mid { z-index: 2; }
 #pano-near { z-index: 3; }
@@ -1042,3 +1042,65 @@ body {
 .cert-actions { display: flex; gap: 10px; margin-top: 16px; }
 .dark-half { flex: 1; background: #202528; color: #F4F2EC; border: 1px solid #2A3034; }
 .login-role-note { margin-bottom: 14px; }
+
+/* ── First-person scenario mode ─────────────────────────────────────────── */
+/* Legacy quiz chrome hides; the cave itself becomes the interface. */
+body.scenario-mode .guide-stepper,
+body.scenario-mode #step-sequence,
+body.scenario-mode #chain-prompt,
+body.scenario-mode #chain-hint,
+body.scenario-mode #chain-scout,
+body.scenario-mode #choices-container,
+body.scenario-mode .ar-topbar,
+body.scenario-mode .ar-caption,
+body.scenario-mode #ar-compass {
+  display: none !important;
+}
+body.scenario-mode .ar-tip { display: none !important; }
+
+/* Scenario HUD: module / objective / progress, minimal top strip */
+.scenario-hud { position: absolute; top: 0; left: 0; right: 0; z-index: 20; padding: 10px 14px 8px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.72), transparent); pointer-events: none; }
+.sc-mod { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.06em; color: #fff; }
+.sc-obj { font-size: 12px; color: var(--cyan); margin-top: 2px; line-height: 1.35; }
+.sc-prog { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--amber); margin-top: 3px; }
+
+/* Center reticle */
+.scan-reticle { position: absolute; left: 50%; top: 46%; width: 26px; height: 26px; z-index: 18; pointer-events: none;
+  transform: translate(-50%, -50%); opacity: 0.85; }
+.scan-reticle::before, .scan-reticle::after { content: ""; position: absolute; background: rgba(244,242,236,0.9); }
+.scan-reticle::before { left: 50%; top: 0; width: 2px; height: 100%; transform: translateX(-50%); }
+.scan-reticle::after { top: 50%; left: 0; height: 2px; width: 100%; transform: translateY(-50%); }
+
+/* Bottom look prompt: name + tap to inspect, only when aimed */
+.look-prompt { position: absolute; left: 16px; right: 16px; bottom: 54px; z-index: 18; display: none;
+  align-items: center; justify-content: center; gap: 10px; text-align: center;
+  background: rgba(8,9,10,0.82); border: 1px solid var(--border); border-left: 3px solid var(--cyan);
+  border-radius: 8px; padding: 10px 12px; font-size: 13px; }
+.look-prompt.active { display: flex; }
+.look-prompt .look-name { font-weight: 600; color: #fff; }
+.look-prompt .look-act { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: var(--cyan); letter-spacing: 0.06em; white-space: nowrap; }
+
+/* Inspection panel: reading + info + decision, slides over lower stage */
+.inspect-panel { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 22; display: none;
+  background: rgba(10,12,14,0.96); border: 1px solid var(--border); border-radius: 12px; padding: 14px;
+  max-height: 62%; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+.inspect-panel.active { display: block; }
+.inspect-title { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 17px; color: #fff; margin-bottom: 6px; }
+.inspect-reading { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: var(--danger); margin-bottom: 6px; }
+.inspect-info { font-size: 13px; line-height: 1.5; color: var(--text); margin-bottom: 10px; }
+.inspect-q { font-size: 14px; font-weight: 600; margin: 6px 0 8px; color: #fff; }
+.inspect-choices { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.inspect-actions .action-btn { width: 100%; }
+
+/* Debrief screen */
+.debrief-screen { background: #0F1214; }
+.debrief-body { padding: 6px 20px 24px; flex: 1; overflow-y: auto; }
+.debrief-list { margin: 4px 0 14px 2px; padding: 0; list-style: none; font-size: 13px; line-height: 1.5; }
+.debrief-list li { padding: 3px 0 3px 20px; position: relative; }
+.debrief-list.ok li::before { content: "✓"; position: absolute; left: 2px; color: var(--success); }
+.debrief-list.bad li::before { content: "✗"; position: absolute; left: 2px; color: var(--danger); }
+.debrief-list li.ok::before { content: "✓"; position: absolute; left: 2px; color: var(--success); }
+.debrief-list li.bad::before { content: "✗"; position: absolute; left: 2px; color: var(--danger); }
+.debrief-expl { font-size: 13px; line-height: 1.55; color: var(--muted); background: #171B1E; border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }

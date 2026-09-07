@@ -59,6 +59,15 @@ const I18N_DATA = {
     ar_hint_locked: "Hazard found — select a response below",
     found_prefix: "OBJECT FOUND:",
     step: "STEP",
+    sc_inspect: "TAP TO INSPECT",
+    sc_close: "Close",
+    sc_correct: "That was the safe call.",
+    sc_objectives: "objectives",
+    sc_debrief: "Scenario Debrief",
+    sc_noticed: "What you noticed",
+    sc_missed: "What you missed",
+    sc_decisions: "Your decisions",
+    sc_continue: "Continue →",
     
     // Consequence
     consequence_title: "CONSEQUENCE: IGNITION / HAZARD",
@@ -241,6 +250,15 @@ const I18N_DATA = {
     ar_hint_locked: "खतरा मिला — नीचे प्रतिक्रिया चुनें",
     found_prefix: "वस्तु मिली:",
     step: "चरण",
+    sc_inspect: "जाँचने के लिए टैप करें",
+    sc_close: "बंद करें",
+    sc_correct: "यह सुरक्षित निर्णय था।",
+    sc_objectives: "उद्देश्य",
+    sc_debrief: "परिदृश्य समीक्षा",
+    sc_noticed: "आपने क्या देखा",
+    sc_missed: "आप क्या चूक गए",
+    sc_decisions: "आपके निर्णय",
+    sc_continue: "आगे बढ़ें →",
     
     // Consequence
     consequence_title: "परिणाम: प्रज्वलन / खतरा",
@@ -425,6 +443,15 @@ const I18N_DATA = {
     ar_hint_locked: "ᱵᱚᱛᱚᱨ ᱧᱟᱢ ᱮᱱᱟ — ᱛᱟᱞᱮ ᱡᱟᱵᱟᱵ ᱪᱩᱱᱟᱹᱣ ᱢᱮ",
     found_prefix: "ᱡᱤᱱᱤᱥ ᱧᱟᱢ:",
     step: "ᱥᱴᱮᱯ",
+    sc_inspect: "ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱴᱤᱯᱟᱹᱣ ᱢᱮ",
+    sc_close: "ᱵᱚᱸᱫᱚ ᱢᱮ",
+    sc_correct: "ᱱᱚᱣᱟ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱜᱚᱴᱟ ᱠᱟᱱᱟ᱾",
+    sc_objectives: "ᱠᱟᱹᱢᱤ",
+    sc_debrief: "ᱢᱩᱪᱟᱹᱫ ᱨᱚᱯᱚᱲ",
+    sc_noticed: "ᱟᱢ ᱪᱮᱫ ᱮᱢ ᱧᱮᱞ ᱠᱮᱫᱼᱟ",
+    sc_missed: "ᱟᱢ ᱪᱮᱫ ᱮᱢ ᱵᱟᱝ ᱧᱮᱞ ᱠᱮᱫᱼᱟ",
+    sc_decisions: "ᱟᱢᱟᱜ ᱜᱚᱴᱟ ᱠᱚ",
+    sc_continue: "ᱞᱟᱦᱟᱜ ᱪᱟᱞᱟᱜ ᱢᱮ →",
     
     // Consequence
     consequence_title: "ᱯᱚᱨᱤᱱᱟᱢ: ᱥᱮᱸᱜᱮᱞ ᱡᱩᱞ / ᱵᱚᱛᱚᱨ",

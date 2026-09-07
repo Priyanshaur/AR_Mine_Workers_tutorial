@@ -276,6 +276,19 @@
         <div id="chain-scout" class="chain-scout"></div>
         <div id="chain-hint" class="chain-hint"></div>
 
+        <!-- First-person scenario layer: HUD, reticle, look prompt, inspection -->
+        <div id="scenario-hud" class="scenario-hud"></div>
+        <div id="scan-reticle" class="scan-reticle" aria-hidden="true"></div>
+        <div id="look-prompt" class="look-prompt"><span class="look-name"></span><span class="look-act" data-i18n="sc_inspect">TAP TO INSPECT</span></div>
+        <div id="inspect-panel" class="inspect-panel">
+          <div class="inspect-title"></div>
+          <div class="inspect-reading"></div>
+          <div class="inspect-info"></div>
+          <div class="inspect-choices"></div>
+          <div class="inspect-actions"></div>
+          <button id="btn-inspect-close" class="ghost-btn" data-i18n="sc_close">Close</button>
+        </div>
+
         <!-- Pseudo-3D object viewport (revealed when the target is locked) -->
         <div id="ar-object-viewport" class="ar-object-viewport">
           <div id="ar-object-stage" class="ar-object-stage">
@@ -433,6 +446,26 @@
       <button id="btn-complete-cert" class="action-btn" style="width:100%;" data-i18n="view_cert">View Certificate</button>
       <button id="btn-complete-next" class="ghost-btn" style="width:100%; margin-top:10px;" data-i18n="next_module">Next Module</button>
       <div class="complete-tag" data-i18n="complete_tag">Small actions make a big difference.</div>
+    </div>
+
+    <!-- Screen: Scenario Debrief -->
+    <div id="screen-debrief" class="app-screen debrief-screen">
+      <div class="hazard-strip"></div>
+      <div class="page-head"><div class="page-title" data-i18n="sc_debrief">Scenario Debrief</div></div>
+      <div class="debrief-body">
+        <div class="field-label" data-i18n="sc_noticed">What you noticed</div>
+        <ul id="debrief-noticed" class="debrief-list ok"></ul>
+        <div class="field-label" data-i18n="sc_missed">What you missed</div>
+        <ul id="debrief-missed" class="debrief-list bad"></ul>
+        <div class="field-label" data-i18n="sc_decisions">Your decisions</div>
+        <ul id="debrief-decisions" class="debrief-list"></ul>
+        <div class="stat-chips">
+          <span class="stat-chip"><span aria-hidden="true">⏱</span><span data-i18n="stat_time">Time</span> — <b id="debrief-time" class="mono">0:00</b></span>
+          <span class="stat-chip"><span aria-hidden="true">🎯</span><span data-i18n="stat_attempts">Attempts</span> — <b id="debrief-mistakes" class="mono">0</b></span>
+        </div>
+        <div id="debrief-expl" class="debrief-expl"></div>
+        <button id="btn-debrief-continue" class="action-btn" style="width:100%;" data-i18n="sc_continue">Continue →</button>
+      </div>
     </div>
 
     <!-- Screen: My Certificates -->
@@ -604,6 +637,8 @@
 <script src="js/dashboard.js"></script>
 <script src="js/panorama.js"></script>
 <script src="js/chain.js"></script>
-  <script src="js/app.js"></script>
+<script src="js/scenario.js"></script>
+<script src="js/sfx.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
